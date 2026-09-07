@@ -8,8 +8,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Undangan Digitalisasi UMKM 2026",
-  description: "Form pendaftaran eksklusif untuk acara Digitalisasi UMKM 2026.",
+  title: "Sharing UMKM: Dari Manual ke Digital",
+  description: "Form pendaftaran eksklusif acara Sharing UMKM: Solusi Anti Ribet Catat Keuangan & Tarik Pembeli.",
 };
 
 export default function RootLayout({

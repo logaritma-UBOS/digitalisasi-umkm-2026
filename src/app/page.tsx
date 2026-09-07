@@ -68,9 +68,10 @@ export default function Home() {
           
           <div className="relative z-10">
             <p className="text-blue-200 font-medium tracking-widest text-xs md:text-sm mb-3 uppercase">Undangan Eksklusif</p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight">Digitalisasi<br/>UMKM 2026</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2 leading-tight">Sharing UMKM</h1>
+            <h2 className="text-lg md:text-xl font-medium text-blue-100 mb-4 leading-snug">"Dari Manual ke Digital: Solusi Anti Ribet Catat Keuangan & Tarik Pembeli"</h2>
             <p className="text-blue-100/90 mb-8 leading-relaxed text-sm md:text-base font-light">
-              Mari bergabung bersama ratusan pelaku UMKM lainnya dalam transformasi digital terbesar tahun ini. Tingkatkan omzet dan perluas pasar Anda ke level selanjutnya!
+              Mari bergabung bersama ratusan pelaku UMKM lainnya dalam transformasi digital terbesar tahun ini. Tingkatkan omset dan perluas pasar Anda ke level selanjutnya!
             </p>
 
             <div className="space-y-5 text-sm md:text-base">
@@ -87,7 +88,7 @@ export default function Home() {
                   <Clock className="w-5 h-5 text-blue-100" />
                 </div>
                 <div>
-                  <p className="font-semibold tracking-wide">09:00 - 15:00 WIB</p>
+                  <p className="font-semibold tracking-wide">08:30 - 11:30 WIB</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -95,8 +96,10 @@ export default function Home() {
                   <MapPin className="w-5 h-5 text-blue-100" />
                 </div>
                 <div>
-                  <p className="font-semibold tracking-wide">Grand Ballroom Hotel</p>
-                  <p className="text-blue-200/80 text-xs mt-0.5">Tersedia opsi via Zoom Meeting</p>
+                  <a href="https://maps.app.goo.gl/GFPoSw99EN58zva16?g_st=aw" target="_blank" rel="noopener noreferrer" className="group cursor-pointer block">
+                    <p className="font-semibold tracking-wide group-hover:underline transition-all">Aula Kantor DPD PKS Kalimalang</p>
+                    <p className="text-blue-200/80 text-xs mt-0.5 group-hover:text-blue-100 transition-all flex items-center gap-1">Lihat di Google Maps &rarr;</p>
+                  </a>
                 </div>
               </div>
             </div>

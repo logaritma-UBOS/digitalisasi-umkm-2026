@@ -61,7 +61,7 @@ export async function POST(request: Request) {
 
     // 5. Kirim Pesan Konfirmasi via Fonnte
     const fonnteToken = process.env.FONNTE_TOKEN;
-    const message = `Halo *${namaLengkap}*,\n\nTerima kasih telah mendaftar di acara *Digitalisasi UMKM 2026*!\n\nNama Usaha: ${namaUsaha}\nEmail: ${email}\n\nKami akan mengirimkan informasi selanjutnya melalui WhatsApp ini. Sampai jumpa pada tanggal 21 September 2026!\n\nSalam,\nPanitia Digitalisasi UMKM 2026`;
+    const message = `Halo *${namaLengkap}*,\n\nTerima kasih telah mendaftar di acara *Sharing UMKM: Dari Manual ke Digital*!\n\nNama Usaha: ${namaUsaha}\nEmail: ${email}\n\nKami tunggu kehadiran Anda pada:\n🗓️ Senin, 21 September 2026\n⏰ 08:30 - 11:30 WIB\n📍 Aula Kantor DPD PKS Kalimalang\n🗺️ Buka Maps: https://maps.app.goo.gl/GFPoSw99EN58zva16?g_st=aw\n\nSalam,\nPanitia Penyelenggara`;
 
     try {
       const fonnteResponse = await fetch('https://api.fonnte.com/send', {

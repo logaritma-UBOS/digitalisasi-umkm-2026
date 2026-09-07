@@ -58,47 +58,55 @@ export default function Home() {
         <div className="absolute top-[60%] -right-[10%] w-[40%] h-[60%] rounded-full bg-indigo-200/40 blur-[120px]"></div>
       </div>
 
-      <div className="w-full max-w-5xl bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row z-10 border border-white">
+      <div className="w-full max-w-5xl flex flex-col md:flex-row z-10 relative">
         
         {/* Left Side - Invitation Detail (Hero) */}
-        <div className="w-full md:w-5/12 bg-gradient-to-br from-blue-600 to-indigo-800 p-8 md:p-12 flex flex-col justify-center text-white relative overflow-hidden">
+        <div className="w-full md:w-5/12 bg-gradient-to-br from-blue-600 to-indigo-800 rounded-3xl md:rounded-r-none md:rounded-l-[2rem] p-8 md:p-12 pb-16 md:pb-12 flex flex-col justify-center text-white relative overflow-hidden shadow-xl">
           {/* Subtle overlay pattern/glow */}
           <div className="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-64 h-64 bg-black opacity-20 rounded-full blur-3xl"></div>
           
           <div className="relative z-10">
-            <p className="text-blue-200 font-medium tracking-widest text-xs md:text-sm mb-3 uppercase">Undangan Eksklusif</p>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2 leading-tight">Sharing UMKM</h1>
-            <h2 className="text-lg md:text-xl font-medium text-blue-100 mb-4 leading-snug">"Dari Manual ke Digital: Solusi Anti Ribet Catat Keuangan & Tarik Pembeli"</h2>
-            <p className="text-blue-100/90 mb-8 leading-relaxed text-sm md:text-base font-light">
+            <p className="text-blue-200 font-medium tracking-widest text-xs md:text-sm mb-3 uppercase drop-shadow-sm">Undangan Eksklusif</p>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 leading-tight drop-shadow-sm">Sharing UMKM</h1>
+            
+            {/* TWEAK 2: Warna Aksen Emas Pastel & Italic untuk Tema */}
+            <h2 className="text-lg md:text-xl font-medium text-yellow-300/90 italic mb-6 leading-snug drop-shadow-md">
+              "Dari Manual ke Digital: Solusi Anti Ribet Catat Keuangan & Tarik Pembeli"
+            </h2>
+            
+            <p className="text-blue-50/90 mb-8 leading-relaxed text-sm md:text-base font-light">
               Mari bergabung bersama ratusan pelaku UMKM lainnya dalam transformasi digital terbesar tahun ini. Tingkatkan omset dan perluas pasar Anda ke level selanjutnya!
             </p>
 
-            <div className="space-y-5 text-sm md:text-base">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 backdrop-blur-sm">
-                  <Calendar className="w-5 h-5 text-blue-100" />
+            {/* TWEAK 3: Spacing & Jarak Ikon Diperlonggar */}
+            <div className="space-y-6 text-sm md:text-base mt-8">
+              <div className="flex items-center gap-5">
+                <div className="w-11 h-11 rounded-full bg-white/15 shadow-inner flex items-center justify-center shrink-0 backdrop-blur-md">
+                  <Calendar className="w-5 h-5 text-blue-50" />
                 </div>
                 <div>
                   <p className="font-semibold tracking-wide">Senin, 21 Sept 2026</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 backdrop-blur-sm">
-                  <Clock className="w-5 h-5 text-blue-100" />
+              
+              <div className="flex items-center gap-5">
+                <div className="w-11 h-11 rounded-full bg-white/15 shadow-inner flex items-center justify-center shrink-0 backdrop-blur-md">
+                  <Clock className="w-5 h-5 text-blue-50" />
                 </div>
                 <div>
                   <p className="font-semibold tracking-wide">08:30 - 11:30 WIB</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 backdrop-blur-sm">
-                  <MapPin className="w-5 h-5 text-blue-100" />
+              
+              <div className="flex items-center gap-5">
+                <div className="w-11 h-11 rounded-full bg-white/15 shadow-inner flex items-center justify-center shrink-0 backdrop-blur-md">
+                  <MapPin className="w-5 h-5 text-blue-50" />
                 </div>
                 <div>
                   <a href="https://maps.app.goo.gl/GFPoSw99EN58zva16?g_st=aw" target="_blank" rel="noopener noreferrer" className="group cursor-pointer block">
                     <p className="font-semibold tracking-wide group-hover:underline transition-all">Aula Kantor DPD PKS Kalimalang</p>
-                    <p className="text-blue-200/80 text-xs mt-0.5 group-hover:text-blue-100 transition-all flex items-center gap-1">Lihat di Google Maps &rarr;</p>
+                    <p className="text-blue-200/80 text-[13px] mt-1 group-hover:text-blue-100 transition-all flex items-center gap-1">Lihat di Google Maps &rarr;</p>
                   </a>
                 </div>
               </div>
@@ -106,8 +114,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Right Side - Form Section */}
-        <div className="w-full md:w-7/12 p-8 md:p-12 lg:p-14 bg-white flex flex-col justify-center">
+        {/* Right Side - Form Section (TWEAK 1: Overlap Transition & Rounded Corners) */}
+        <div className="w-full md:w-7/12 p-8 md:p-12 lg:p-14 bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-[0_-20px_40px_-15px_rgba(0,0,0,0.1)] md:shadow-[-20px_0_40px_-15px_rgba(0,0,0,0.1)] z-20 relative -mt-8 md:mt-0 md:-ml-8 flex flex-col justify-center border border-white">
           {status === 'success' ? (
             <div className="text-center py-10 animate-in fade-in zoom-in duration-500">
               <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -151,7 +159,7 @@ export default function Home() {
                       required
                       value={formData.namaLengkap}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-800"
+                      className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-800"
                       placeholder="Sesuai KTP"
                     />
                   </div>
@@ -166,7 +174,7 @@ export default function Home() {
                       required
                       value={formData.namaUsaha}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-800"
+                      className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-800"
                       placeholder="Merek / Toko Anda"
                     />
                   </div>
@@ -183,7 +191,7 @@ export default function Home() {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-800"
+                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-800"
                     placeholder="nama@email.com"
                   />
                 </div>
@@ -199,7 +207,7 @@ export default function Home() {
                     required
                     value={formData.noWhatsapp}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-800"
+                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-800"
                     placeholder="Contoh: 08123456789"
                   />
                   <p className="text-[11px] text-gray-400 mt-1.5 ml-1">E-Ticket akan dikirimkan ke nomor ini.</p>
@@ -209,7 +217,7 @@ export default function Home() {
                   <button
                     type="submit"
                     disabled={status === 'loading'}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-500/30 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed hover:-translate-y-0.5 active:translate-y-0"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-xl transition-all shadow-[0_8px_20px_-6px_rgba(37,99,235,0.4)] flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed hover:-translate-y-0.5 active:translate-y-0"
                   >
                     {status === 'loading' ? (
                       <>

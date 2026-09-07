@@ -8,8 +8,14 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Sharing UMKM: Dari Manual ke Digital",
-  description: "Form pendaftaran eksklusif acara Sharing UMKM: Solusi Anti Ribet Catat Keuangan & Tarik Pembeli.",
+  title: "🚀 Rahasia UMKM Laris Manis & Keuangan Rapi Tanpa Pusing!",
+  description: "Masih pakai cara manual? Temukan 'cheat code' digitalisasi untuk melipatgandakan omset Anda. Kuota sangat terbatas, amankan kursi Anda sekarang sebelum kehabisan!",
+  openGraph: {
+    title: "🚀 Rahasia UMKM Laris Manis & Keuangan Rapi Tanpa Pusing!",
+    description: "Masih pakai cara manual? Temukan 'cheat code' digitalisasi untuk melipatgandakan omset Anda. Kuota sangat terbatas, amankan kursi Anda sekarang sebelum kehabisan!",
+    type: "website",
+    locale: "id_ID",
+  },
 };
 
 export default function RootLayout({

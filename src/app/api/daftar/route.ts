@@ -59,9 +59,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // 5. Kirim Pesan Konfirmasi via Fonnte
+    // 5. Kirim Pesan Konfirmasi via Fonnte (Berisi Link Grup WA)
     const fonnteToken = process.env.FONNTE_TOKEN;
-    const message = `Halo *${namaLengkap}*,\n\nTerima kasih telah mendaftar di acara *Sharing UMKM: Dari Manual ke Digital*!\n\nNama Usaha: ${namaUsaha}\nEmail: ${email}\n\nKami tunggu kehadiran Anda pada:\n🗓️ Senin, 21 September 2026\n⏰ 08:30 - 11:30 WIB\n📍 Aula Kantor DPD PKS Kalimalang\n🗺️ Buka Maps: https://maps.app.goo.gl/GFPoSw99EN58zva16?g_st=aw\n\nSalam,\nPanitia Penyelenggara`;
+    const message = `Halo *${namaLengkap}*,\n\nTerima kasih telah mendaftar di acara *Sharing UMKM: Dari Manual ke Digital*!\n\n🗓️ Senin, 21 September 2026\n⏰ 08:30 - 11:30 WIB\n📍 Aula Kantor DPD PKS Kalimalang\n\n⚠️ *LANGKAH SELANJUTNYA (WAJIB):*\nAgar tidak ketinggalan informasi penting, diskusi, dan materi acara, silakan langsung bergabung ke Grup WhatsApp resmi peserta melalui link berikut:\n\n👉 https://chat.whatsapp.com/Fkn3RcnNI8nBUqUQ0ErhJA\n\nSilakan klik link di atas dan sampai jumpa di grup! 🚀\n\nSalam,\nPanitia Penyelenggara`;
 
     try {
       const fonnteResponse = await fetch('https://api.fonnte.com/send', {

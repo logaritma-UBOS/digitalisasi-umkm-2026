@@ -1,32 +1,73 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+const getAdminPassword = () => process.env.ADMIN_PASSWORD || 'adminlog2026';
+
 export async function GET(request: Request) {
   try {
-    const passwordHeader = request.headers.get('x-admin-password');
-    // Prioritaskan dari env Vercel, jika tidak ada gunakan yang disepakati
-    const adminPassword = process.env.ADMIN_PASSWORD || 'adminlog2026';
-
-    if (passwordHeader !== adminPassword) {
+    if (request.headers.get('x-admin-password') !== getAdminPassword()) {
       return NextResponse.json({ message: 'Akses Ditolak' }, { status: 401 });
     }
 
-    // Mengambil data dari Supabase, diurutkan dari yang terbaru
     const { data, error } = await supabaseAdmin
       .from('peserta')
       .select('*')
       .order('created_at', { ascending: false });
 
+    if (error) throw error;
+    return NextResponse.json({ data }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: 'Gagal mengambil data' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    if (request.headers.get('x-admin-password') !== getAdminPassword()) {
+      return NextResponse.json({ message: 'Akses Ditolak' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    
+    if (!id) return NextResponse.json({ message: 'ID diperlukan' }, { status: 400 });
+
+    const { error } = await supabaseAdmin.from('peserta').delete().eq('id', id);
+    if (error) throw error;
+
+    return NextResponse.json({ message: 'Berhasil dihapus' }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: 'Gagal menghapus data' }, { status: 500 });
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    if (request.headers.get('x-admin-password') !== getAdminPassword()) {
+      return NextResponse.json({ message: 'Akses Ditolak' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { id, nama_lengkap, nama_usaha, email, no_whatsapp } = body;
+    
+    if (!id) return NextResponse.json({ message: 'ID diperlukan' }, { status: 400 });
+
+    const { error } = await supabaseAdmin.from('peserta').update({
+      nama_lengkap,
+      nama_usaha,
+      email,
+      no_whatsapp
+    }).eq('id', id);
+
     if (error) {
+      if (error.code === '23505') {
+        return NextResponse.json({ message: 'Email sudah terdaftar (Duplikat)' }, { status: 409 });
+      }
       throw error;
     }
 
-    return NextResponse.json({ data }, { status: 200 });
+    return NextResponse.json({ message: 'Berhasil diperbarui' }, { status: 200 });
   } catch (error) {
-    console.error('Admin API Error:', error);
-    return NextResponse.json(
-      { message: 'Gagal mengambil data peserta' },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: 'Gagal memperbarui data' }, { status: 500 });
   }
 }

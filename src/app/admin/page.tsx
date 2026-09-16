@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, Users, Download, Lock, RefreshCw } from 'lucide-react';
+import { Loader2, Users, Download, Lock, RefreshCw, Pencil, Trash2, X } from 'lucide-react';
 
 interface Peserta {
   id: string;
@@ -18,6 +18,9 @@ export default function AdminDashboard() {
   const [peserta, setPeserta] = useState<Peserta[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  const [editingPeserta, setEditingPeserta] = useState<Peserta | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const fetchPeserta = async (pass: string) => {
     setLoading(true);
@@ -44,6 +47,53 @@ export default function AdminDashboard() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     fetchPeserta(password);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Apakah Anda yakin ingin menghapus peserta ini? Data tidak bisa dikembalikan.')) return;
+    
+    try {
+      const res = await fetch(`/api/admin/peserta?id=${id}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-password': password },
+      });
+      if (res.ok) {
+        setPeserta(prev => prev.filter(p => p.id !== id));
+      } else {
+        alert('Gagal menghapus peserta. Coba lagi.');
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan koneksi.');
+    }
+  };
+
+  const handleEditSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingPeserta) return;
+    
+    setIsSaving(true);
+    try {
+      const res = await fetch('/api/admin/peserta', {
+        method: 'PUT',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-admin-password': password 
+        },
+        body: JSON.stringify(editingPeserta),
+      });
+
+      if (res.ok) {
+        setPeserta(prev => prev.map(p => p.id === editingPeserta.id ? editingPeserta : p));
+        setEditingPeserta(null);
+      } else {
+        const data = await res.json();
+        alert(data.message || 'Gagal menyimpan perubahan');
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan koneksi.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const downloadCSV = () => {
@@ -105,7 +155,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
+    <div className="min-h-screen bg-slate-50 p-4 md:p-8 relative">
       <div className="max-w-6xl mx-auto space-y-6">
         
         {/* Header & Stats */}
@@ -147,16 +197,17 @@ export default function AdminDashboard() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50/50 border-b border-gray-100">
-                  <th className="p-5 text-sm font-semibold text-gray-600">No</th>
+                  <th className="p-5 text-sm font-semibold text-gray-600 w-16">No</th>
                   <th className="p-5 text-sm font-semibold text-gray-600">Nama Lengkap</th>
                   <th className="p-5 text-sm font-semibold text-gray-600">Nama Usaha</th>
                   <th className="p-5 text-sm font-semibold text-gray-600">Email & WhatsApp</th>
                   <th className="p-5 text-sm font-semibold text-gray-600">Waktu Pendaftaran</th>
+                  <th className="p-5 text-sm font-semibold text-gray-600 text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {peserta.map((p, index) => (
-                  <tr key={p.id} className="hover:bg-blue-50/30 transition-colors">
+                  <tr key={p.id} className="hover:bg-blue-50/30 transition-colors group">
                     <td className="p-5 text-sm text-gray-500">{index + 1}</td>
                     <td className="p-5">
                       <p className="font-semibold text-gray-800">{p.nama_lengkap}</p>
@@ -172,11 +223,29 @@ export default function AdminDashboard() {
                         hour: '2-digit', minute: '2-digit'
                       })}
                     </td>
+                    <td className="p-5 text-center">
+                      <div className="flex items-center justify-center gap-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button 
+                          onClick={() => setEditingPeserta(p)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Edit"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(p.id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Hapus"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
                 {peserta.length === 0 && !loading && (
                   <tr>
-                    <td colSpan={5} className="p-10 text-center text-gray-500">
+                    <td colSpan={6} className="p-10 text-center text-gray-500">
                       Belum ada pendaftar sejauh ini.
                     </td>
                   </tr>
@@ -186,6 +255,83 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Edit Modal Overlay */}
+      {editingPeserta && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-gray-800">Edit Data Peserta</h3>
+              <button 
+                onClick={() => setEditingPeserta(null)}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <form onSubmit={handleEditSave} className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap</label>
+                <input
+                  type="text"
+                  required
+                  value={editingPeserta.nama_lengkap}
+                  onChange={(e) => setEditingPeserta({...editingPeserta, nama_lengkap: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-800"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Usaha</label>
+                <input
+                  type="text"
+                  required
+                  value={editingPeserta.nama_usaha}
+                  onChange={(e) => setEditingPeserta({...editingPeserta, nama_usaha: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-800"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+                <input
+                  type="email"
+                  required
+                  value={editingPeserta.email}
+                  onChange={(e) => setEditingPeserta({...editingPeserta, email: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-800"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nomor WhatsApp</label>
+                <input
+                  type="tel"
+                  required
+                  value={editingPeserta.no_whatsapp}
+                  onChange={(e) => setEditingPeserta({...editingPeserta, no_whatsapp: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-800"
+                />
+              </div>
+              
+              <div className="pt-4 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setEditingPeserta(null)}
+                  className="flex-1 py-3 text-gray-600 bg-gray-100 hover:bg-gray-200 font-medium rounded-xl transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="flex-1 py-3 text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-xl shadow-lg transition-colors flex items-center justify-center disabled:opacity-70"
+                >
+                  {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Simpan Perubahan'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

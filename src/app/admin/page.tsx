@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, Users, Download, Lock, RefreshCw, Pencil, Trash2, X, Send } from 'lucide-react';
+import { Loader2, Users, Download, Lock, RefreshCw, Pencil, Trash2, X, Send, CheckSquare } from 'lucide-react';
 
 interface Peserta {
   id: string;
@@ -21,6 +21,10 @@ export default function AdminDashboard() {
 
   const [editingPeserta, setEditingPeserta] = useState<Peserta | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  
+  // State untuk bulk select
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isBulkSending, setIsBulkSending] = useState(false);
 
   const fetchPeserta = async (pass: string) => {
     setLoading(true);
@@ -34,6 +38,7 @@ export default function AdminDashboard() {
         const result = await res.json();
         setPeserta(result.data);
         setIsAuthenticated(true);
+        setSelectedIds([]); // Reset selection on refresh
       } else {
         setErrorMsg('Password salah atau akses ditolak!');
       }
@@ -59,6 +64,7 @@ export default function AdminDashboard() {
       });
       if (res.ok) {
         setPeserta(prev => prev.filter(p => p.id !== id));
+        setSelectedIds(prev => prev.filter(selectedId => selectedId !== id));
       } else {
         alert('Gagal menghapus peserta. Coba lagi.');
       }
@@ -86,6 +92,54 @@ export default function AdminDashboard() {
       }
     } catch (err) {
       alert('Terjadi kesalahan saat mengirim pesan.');
+    }
+  };
+
+  // Handler untuk fitur Bulk
+  const handleBulkSend = async () => {
+    if (selectedIds.length === 0) return;
+    
+    if (!window.confirm(`Kirim pesan WA secara otomatis ke ${selectedIds.length} peserta terpilih?\n\n(Proses ini memakan waktu sekitar 1 detik per pesan untuk menghindari blokir WhatsApp)`)) return;
+
+    setIsBulkSending(true);
+    const targets = peserta.filter(p => selectedIds.includes(p.id));
+
+    try {
+      const res = await fetch('/api/admin/send-wa-bulk', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-admin-password': password 
+        },
+        body: JSON.stringify({ targets }),
+      });
+      
+      const data = await res.json();
+      
+      if (res.ok) {
+        alert(data.message || `Berhasil mengirim pesan ke ${selectedIds.length} peserta!`);
+        setSelectedIds([]); // Kosongkan seleksi setelah sukses
+      } else {
+        alert(data.message || 'Gagal mengirim pesan massal.');
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan sistem saat mengirim pesan massal.');
+    } finally {
+      setIsBulkSending(false);
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => 
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.length === peserta.length && peserta.length > 0) {
+      setSelectedIds([]); // Deselect all
+    } else {
+      setSelectedIds(peserta.map(p => p.id)); // Select all
     }
   };
 
@@ -186,7 +240,20 @@ export default function AdminDashboard() {
             <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Data Peserta UMKM 2026</h1>
             <p className="text-gray-500 text-sm">Real-time tersinkronisasi dengan database Supabase</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 md:gap-4 flex-wrap">
+            {/* Tombol Bulk Action muncul jika ada yang di centang */}
+            {selectedIds.length > 0 && (
+              <button 
+                onClick={handleBulkSend}
+                disabled={isBulkSending}
+                className="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-white shadow-lg transition-all flex items-center gap-2 animate-in fade-in slide-in-from-right-4"
+                title="Kirim ke semua yang dipilih"
+              >
+                {isBulkSending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                <span className="font-semibold text-sm">Kirim ke {selectedIds.length} Orang</span>
+              </button>
+            )}
+
             <div className="bg-blue-50 px-5 py-3 rounded-2xl flex items-center gap-3">
               <Users className="w-6 h-6 text-blue-600" />
               <div>
@@ -219,6 +286,15 @@ export default function AdminDashboard() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50/50 border-b border-gray-100">
+                  <th className="p-5 w-12 text-center">
+                    <input 
+                      type="checkbox" 
+                      className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                      checked={peserta.length > 0 && selectedIds.length === peserta.length}
+                      onChange={toggleSelectAll}
+                      title="Pilih Semua"
+                    />
+                  </th>
                   <th className="p-5 text-sm font-semibold text-gray-600 w-16">No</th>
                   <th className="p-5 text-sm font-semibold text-gray-600">Nama Lengkap</th>
                   <th className="p-5 text-sm font-semibold text-gray-600">Nama Usaha</th>
@@ -229,7 +305,15 @@ export default function AdminDashboard() {
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {peserta.map((p, index) => (
-                  <tr key={p.id} className="hover:bg-blue-50/30 transition-colors group">
+                  <tr key={p.id} className={`transition-colors group ${selectedIds.includes(p.id) ? 'bg-blue-50/50' : 'hover:bg-blue-50/30'}`}>
+                    <td className="p-5 text-center">
+                      <input 
+                        type="checkbox" 
+                        className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                        checked={selectedIds.includes(p.id)}
+                        onChange={() => toggleSelect(p.id)}
+                      />
+                    </td>
                     <td className="p-5 text-sm text-gray-500">{index + 1}</td>
                     <td className="p-5">
                       <p className="font-semibold text-gray-800">{p.nama_lengkap}</p>
@@ -274,7 +358,7 @@ export default function AdminDashboard() {
                 ))}
                 {peserta.length === 0 && !loading && (
                   <tr>
-                    <td colSpan={6} className="p-10 text-center text-gray-500">
+                    <td colSpan={7} className="p-10 text-center text-gray-500">
                       Belum ada pendaftar sejauh ini.
                     </td>
                   </tr>

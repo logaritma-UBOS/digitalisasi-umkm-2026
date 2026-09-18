@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, Users, Download, Lock, RefreshCw, Pencil, Trash2, X } from 'lucide-react';
+import { Loader2, Users, Download, Lock, RefreshCw, Pencil, Trash2, X, Send } from 'lucide-react';
 
 interface Peserta {
   id: string;
@@ -64,6 +64,28 @@ export default function AdminDashboard() {
       }
     } catch (err) {
       alert('Terjadi kesalahan koneksi.');
+    }
+  };
+
+  const handleSendWA = async (p: Peserta) => {
+    if (!window.confirm(`Kirim pesan WA undangan grup ke ${p.nama_lengkap}?`)) return;
+    
+    try {
+      const res = await fetch('/api/admin/send-wa', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-admin-password': password 
+        },
+        body: JSON.stringify({ target: p.no_whatsapp, namaLengkap: p.nama_lengkap }),
+      });
+      if (res.ok) {
+        alert(`Pesan WA berhasil dikirim ke ${p.nama_lengkap}!`);
+      } else {
+        alert('Gagal mengirim pesan WA. Pastikan nomor Fonnte aktif.');
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan saat mengirim pesan.');
     }
   };
 
@@ -224,7 +246,14 @@ export default function AdminDashboard() {
                       })}
                     </td>
                     <td className="p-5 text-center">
-                      <div className="flex items-center justify-center gap-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center justify-center gap-2">
+                        <button 
+                          onClick={() => handleSendWA(p)}
+                          className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                          title="Kirim Pesan WA (Pancingan)"
+                        >
+                          <Send className="w-4 h-4" />
+                        </button>
                         <button 
                           onClick={() => setEditingPeserta(p)}
                           className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"

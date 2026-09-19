@@ -40,12 +40,21 @@ const QUIZ_DATA = [
 ];
 
 export default function KuisUMKM() {
+  const [nama, setNama] = useState('');
   const [started, setStarted] = useState(false);
   const [currentQ, setCurrentQ] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
+  const [startTime, setStartTime] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleStart = () => {
+    if (!nama.trim()) return alert('Mohon isi nama Anda terlebih dahulu!');
+    setStarted(true);
+    setStartTime(Date.now());
+  };
 
   const handleAnswer = (index: number) => {
     if (isAnswered) return;
@@ -57,32 +66,60 @@ export default function KuisUMKM() {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentQ < QUIZ_DATA.length - 1) {
       setCurrentQ(prev => prev + 1);
       setSelectedIdx(null);
       setIsAnswered(false);
     } else {
+      // Kuis Selesai
+      setIsSubmitting(true);
+      const timeTaken = Date.now() - startTime;
+      const finalScore = score + (selectedIdx === QUIZ_DATA[currentQ].correctAnswer ? 100 : 0);
+      
+      try {
+        await fetch('/api/kuis', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nama, score: finalScore, time: timeTaken })
+        });
+      } catch (e) {
+        console.error('Failed to save score');
+      }
+      
       setShowResult(true);
+      setIsSubmitting(false);
     }
   };
 
   if (!started) {
     return (
       <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 md:p-10 text-center border border-gray-100 animate-in fade-in zoom-in duration-500">
+        <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-gray-100 animate-in fade-in zoom-in duration-500">
           <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
             <Sparkles className="w-10 h-10 text-blue-600" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">Kuis Spesial UMKM</h1>
-          <p className="text-gray-500 mb-8 leading-relaxed">
-            Uji seberapa siap Anda membawa bisnis dari sistem manual menuju era digital! Mari jawab 3 studi kasus krusial ini.
+          <h1 className="text-3xl font-bold text-gray-800 mb-2 text-center">Kuis UMKM</h1>
+          <p className="text-gray-500 mb-8 leading-relaxed text-center text-sm">
+            Tulis nama Anda untuk memperebutkan peringkat 3 besar di layar proyektor!
           </p>
+          
+          <div className="mb-6">
+            <input
+              type="text"
+              required
+              value={nama}
+              onChange={(e) => setNama(e.target.value)}
+              placeholder="Masukkan Nama Anda..."
+              className="w-full px-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-center font-semibold text-gray-800"
+            />
+          </div>
+
           <button 
-            onClick={() => setStarted(true)}
-            className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-[0_8px_20px_-6px_rgba(37,99,235,0.4)] hover:-translate-y-0.5 active:translate-y-0"
+            onClick={handleStart}
+            className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-[0_8px_20px_-6px_rgba(37,99,235,0.4)] hover:-translate-y-0.5 active:translate-y-0"
           >
-            Mulai Kuis Sekarang
+            Mulai Adu Cepat!
           </button>
         </div>
       </main>
@@ -98,19 +135,17 @@ export default function KuisUMKM() {
             <Trophy className={`w-12 h-12 ${isPerfect ? 'text-yellow-500' : 'text-blue-500'}`} />
           </div>
           <h2 className="text-5xl font-extrabold text-gray-800 mb-2">{score}</h2>
-          <p className="text-xs font-bold text-gray-400 tracking-widest uppercase mb-6">Total Skor Anda</p>
+          <p className="text-xs font-bold text-gray-400 tracking-widest uppercase mb-6">Skor Akhir: {nama}</p>
           
-          <p className="text-gray-600 mb-8 leading-relaxed">
-            {isPerfect 
-              ? "Luar Biasa! Anda sudah memiliki mindset digitalisasi yang sangat matang. Bisnis Anda siap meroket! 🚀" 
-              : "Kerja bagus! Anda sudah di jalur yang tepat. Mari kita perdalam lagi ilmu digitalisasinya di sesi materi hari ini! 💡"}
+          <p className="text-gray-600 mb-8 leading-relaxed font-medium">
+            Skor dan waktu pengerjaan Anda telah dikirim ke sistem. Silakan lihat layar proyektor di depan untuk melihat posisi peringkat Anda!
           </p>
 
           <button 
             onClick={() => window.location.reload()}
             className="w-full py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-all mb-3"
           >
-            Ulangi Kuis
+            Kembali
           </button>
         </div>
       </main>
@@ -177,15 +212,15 @@ export default function KuisUMKM() {
 
         <button
           onClick={handleNext}
-          disabled={!isAnswered}
+          disabled={!isAnswered || isSubmitting}
           className={`w-full py-4 rounded-xl font-bold flex items-center justify-center transition-all ${
             isAnswered 
               ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-[0_8px_20px_-6px_rgba(37,99,235,0.4)] hover:-translate-y-0.5' 
               : 'bg-gray-100 text-gray-400 cursor-not-allowed'
           }`}
         >
-          {currentQ === QUIZ_DATA.length - 1 ? 'Lihat Total Skor' : 'Lanjut ke Kasus Berikutnya'}
-          {isAnswered && <ArrowRight className="w-5 h-5 ml-2" />}
+          {isSubmitting ? 'Mengirim Data...' : (currentQ === QUIZ_DATA.length - 1 ? 'Kirim & Lihat Hasil' : 'Lanjut ke Kasus Berikutnya')}
+          {!isSubmitting && isAnswered && <ArrowRight className="w-5 h-5 ml-2" />}
         </button>
       </div>
     </main>

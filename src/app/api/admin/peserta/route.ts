@@ -12,6 +12,7 @@ export async function GET(request: Request) {
     const { data, error } = await supabaseAdmin
       .from('peserta')
       .select('*')
+      .neq('nama_usaha', '__KUIS__')
       .order('created_at', { ascending: false });
 
     if (error) throw error;

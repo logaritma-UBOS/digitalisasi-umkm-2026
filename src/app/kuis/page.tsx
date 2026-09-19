@@ -36,6 +36,28 @@ const QUIZ_DATA = [
     ],
     correctAnswer: 2, // Index C
     explanation: "Digitalisasi sifatnya melipatgandakan apa yang sudah ada. Jika dasar usahanya berantakan (stok kosong/layanan lambat), viral justru akan mempercepat hancurnya reputasi bisnis."
+  },
+  {
+    question: "Jika toko Anda mulai sepi pembeli karena banyak saingan baru, strategi digital apa yang paling efektif dan minim biaya untuk segera dilakukan?",
+    options: [
+      "A. Menurunkan harga sampai rugi agar jadi yang paling murah",
+      "B. Marah-marah di sosial media menyalahkan keadaan",
+      "C. Menganalisa riwayat data penjualan untuk membuat paket promo (bundling) yang menarik sasaran",
+      "D. Langsung menutup toko dan berganti jualan produk lain"
+    ],
+    correctAnswer: 2, // Index C
+    explanation: "Data digital adalah raja. Dari catatan penjualan, Anda bisa menganalisa produk mana yang kurang laku dan menggabungkannya (bundling) dengan produk terlaris sebagai strategi promo baru."
+  },
+  {
+    question: "Banyak UMKM merasa aplikasi kasir (POS) itu ribet. Padahal, 'manfaat rahasia' terbesar dari aplikasi digital ini bagi seorang Bos/Pemilik usaha adalah...",
+    options: [
+      "A. Membuat toko terlihat keren di mata pelanggan",
+      "B. Pemilik bisa memantau kebocoran stok dan omset harian secara real-time dari rumah",
+      "C. Agar kasir ada kerjaan tambahan saat toko sedang sepi",
+      "D. Supaya bisa terhindar dari razia petugas pajak"
+    ],
+    correctAnswer: 1, // Index B
+    explanation: "Aplikasi kasir memberikan kebebasan. Pemilik tidak perlu lagi datang setiap malam hanya untuk menghitung laci uang, karena semua transaksi dan sisa stok terlacak akurat secara real-time di HP."
   }
 ];
 

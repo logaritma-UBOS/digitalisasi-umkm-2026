@@ -53,3 +53,28 @@ export async function GET() {
     return NextResponse.json({ error: 'Gagal mengambil skor' }, { status: 500 });
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const passwordHeader = request.headers.get('x-admin-password');
+    const adminPassword = process.env.ADMIN_PASSWORD || 'adminlog2026';
+    
+    if (passwordHeader !== adminPassword) {
+      return NextResponse.json({ error: 'Akses Ditolak' }, { status: 401 });
+    }
+
+    // Hapus HANYA data kuis, jangan sentuh data pendaftar UMKM asli
+    const { error } = await supabaseAdmin
+      .from('peserta')
+      .delete()
+      .eq('nama_usaha', '__KUIS__');
+      
+    if (error) throw error;
+
+    return NextResponse.json({ success: true, message: 'Data kuis berhasil direset' });
+  } catch (error) {
+    console.error('Reset Quiz Error:', error);
+    return NextResponse.json({ error: 'Gagal mereset kuis' }, { status: 500 });
+  }
+}
+

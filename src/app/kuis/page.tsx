@@ -75,7 +75,7 @@ export default function KuisUMKM() {
       // Kuis Selesai
       setIsSubmitting(true);
       const timeTaken = Date.now() - startTime;
-      const finalScore = score + (selectedIdx === QUIZ_DATA[currentQ].correctAnswer ? 100 : 0);
+      const finalScore = score; // BUG FIXED: Score is already calculated accurately during handleAnswer
       
       try {
         await fetch('/api/kuis', {

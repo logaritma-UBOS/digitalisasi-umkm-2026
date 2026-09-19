@@ -143,6 +143,24 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleResetKuis = async () => {
+    if (!window.confirm('PERINGATAN!\n\nApakah Anda yakin ingin MENGHAPUS SEMUA DATA KUIS? (Tenang, Data pendaftar UMKM asli tidak akan terhapus).')) return;
+    
+    try {
+      const res = await fetch('/api/kuis', {
+        method: 'DELETE',
+        headers: { 'x-admin-password': password }
+      });
+      if (res.ok) {
+        alert('Data Kuis berhasil dibersihkan! Tampilan Live Leaderboard kini kembali kosong.');
+      } else {
+        alert('Gagal membersihkan data kuis.');
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan saat mereset kuis.');
+    }
+  };
+
   const handleEditSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingPeserta) return;
@@ -261,6 +279,16 @@ export default function AdminDashboard() {
                 <p className="text-2xl font-bold text-blue-700 leading-none">{peserta.length}</p>
               </div>
             </div>
+            
+            <button 
+              onClick={handleResetKuis}
+              className="p-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-colors flex items-center gap-2 border border-red-100 shadow-sm"
+              title="Reset Data Kuis"
+            >
+              <Trash2 className="w-5 h-5" />
+              <span className="hidden md:inline font-semibold text-sm pr-1">Reset Kuis</span>
+            </button>
+
             <button 
               onClick={() => fetchPeserta(password)}
               disabled={loading}

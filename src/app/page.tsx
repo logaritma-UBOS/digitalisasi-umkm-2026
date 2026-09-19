@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, CheckCircle2, AlertCircle, Calendar, MapPin, Clock } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertCircle, Calendar, MapPin, Clock, Lock } from 'lucide-react';
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -116,122 +116,18 @@ export default function Home() {
 
         {/* Right Side - Form Section (TWEAK 1: Overlap Transition & Rounded Corners) */}
         <div className="w-full md:w-7/12 p-8 md:p-12 lg:p-14 bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-[0_-20px_40px_-15px_rgba(0,0,0,0.1)] md:shadow-[-20px_0_40px_-15px_rgba(0,0,0,0.1)] z-20 relative -mt-8 md:mt-0 md:-ml-8 flex flex-col justify-center border border-white">
-          {status === 'success' ? (
-            <div className="text-center py-10 animate-in fade-in zoom-in duration-500">
-              <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle2 className="w-10 h-10 text-green-500" />
-              </div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-3">Pendaftaran Berhasil!</h2>
-              <p className="text-gray-500 mb-8 leading-relaxed">
-                Terima kasih telah mendaftar. Tiket eksklusif dan pesan konfirmasi telah dikirim ke nomor WhatsApp Anda.
-              </p>
-              <button
-                onClick={() => setStatus('idle')}
-                className="px-6 py-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 font-semibold transition-colors"
-              >
-                Daftar Peserta Lain
-              </button>
+          <div className="animate-in fade-in zoom-in duration-500 text-center py-10">
+            <div className="w-20 h-20 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Lock className="w-10 h-10 text-slate-400" />
             </div>
-          ) : (
-            <div className="animate-in fade-in duration-500">
-              <div className="mb-8">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Reservasi Tiket</h2>
-                <p className="text-gray-500 text-sm md:text-base">Silakan lengkapi data diri dan usaha Anda di bawah ini untuk mengamankan kursi.</p>
-              </div>
-
-              {status === 'error' && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm text-red-700 font-medium">{errorMessage}</p>
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="space-y-4 md:space-y-0 md:flex md:gap-5">
-                  <div className="w-full">
-                    <label htmlFor="namaLengkap" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                      Nama Lengkap
-                    </label>
-                    <input
-                      type="text"
-                      id="namaLengkap"
-                      name="namaLengkap"
-                      required
-                      value={formData.namaLengkap}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-800"
-                      placeholder="Sesuai KTP"
-                    />
-                  </div>
-                  <div className="w-full">
-                    <label htmlFor="namaUsaha" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                      Nama Usaha
-                    </label>
-                    <input
-                      type="text"
-                      id="namaUsaha"
-                      name="namaUsaha"
-                      required
-                      value={formData.namaUsaha}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-800"
-                      placeholder="Merek / Toko Anda"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Email Aktif
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-800"
-                    placeholder="nama@email.com"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="noWhatsapp" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                    Nomor WhatsApp
-                  </label>
-                  <input
-                    type="tel"
-                    id="noWhatsapp"
-                    name="noWhatsapp"
-                    required
-                    value={formData.noWhatsapp}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-gray-800"
-                    placeholder="Contoh: 08123456789"
-                  />
-                  <p className="text-[11px] text-gray-400 mt-1.5 ml-1">E-Ticket akan dikirimkan ke nomor ini.</p>
-                </div>
-
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    disabled={status === 'loading'}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-xl transition-all shadow-[0_8px_20px_-6px_rgba(37,99,235,0.4)] flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed hover:-translate-y-0.5 active:translate-y-0"
-                  >
-                    {status === 'loading' ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                        Mengamankan Kursi...
-                      </>
-                    ) : (
-                      'Konfirmasi Kehadiran'
-                    )}
-                  </button>
-                </div>
-              </form>
+            <h2 className="text-3xl font-bold text-gray-800 mb-3">Pendaftaran Ditutup</h2>
+            <p className="text-gray-500 mb-8 leading-relaxed">
+              Mohon maaf, kuota peserta untuk acara Sharing UMKM telah terpenuhi dan pendaftaran resmi ditutup.
+            </p>
+            <div className="inline-flex items-center justify-center px-6 py-3 bg-blue-50 text-blue-700 font-semibold rounded-xl">
+              Terima kasih atas antusiasme Anda!
             </div>
-          )}
+          </div>
         </div>
       </div>
     </main>

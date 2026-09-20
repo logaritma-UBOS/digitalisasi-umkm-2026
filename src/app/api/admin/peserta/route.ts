@@ -72,3 +72,36 @@ export async function PUT(request: Request) {
     return NextResponse.json({ message: 'Gagal memperbarui data' }, { status: 500 });
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    if (request.headers.get('x-admin-password') !== getAdminPassword()) {
+      return NextResponse.json({ message: 'Akses Ditolak' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { nama_lengkap, nama_usaha, email, no_whatsapp } = body;
+    
+    if (!nama_lengkap || !nama_usaha || !no_whatsapp) {
+      return NextResponse.json({ message: 'Data belum lengkap' }, { status: 400 });
+    }
+
+    const { data, error } = await supabaseAdmin.from('peserta').insert([{
+      nama_lengkap,
+      nama_usaha,
+      email: email || `${no_whatsapp}@noemail.com`, // fallback for unique constraint if email is empty
+      no_whatsapp
+    }]).select();
+
+    if (error) {
+      if (error.code === '23505') {
+        return NextResponse.json({ message: 'Email atau WA sudah terdaftar (Duplikat)' }, { status: 409 });
+      }
+      throw error;
+    }
+
+    return NextResponse.json({ message: 'Peserta berhasil ditambahkan', data: data[0] }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: 'Gagal menambah data' }, { status: 500 });
+  }
+}

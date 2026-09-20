@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { Loader2, Users, Download, Lock, RefreshCw, Pencil, Trash2, X, Send, CheckSquare, FileText } from 'lucide-react';
+import { Loader2, Users, Download, Lock, RefreshCw, Pencil, Trash2, X, Send, CheckSquare, FileText, Plus } from 'lucide-react';
 
 interface Peserta {
   id: string;
@@ -24,6 +24,11 @@ export default function AdminDashboard() {
   const [editingPeserta, setEditingPeserta] = useState<Peserta | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   
+  // State untuk tambah manual
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newPeserta, setNewPeserta] = useState({ nama_lengkap: '', nama_usaha: '', email: '', no_whatsapp: '' });
+  const [isAdding, setIsAdding] = useState(false);
+
   // State untuk bulk select
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isBulkSending, setIsBulkSending] = useState(false);
@@ -182,13 +187,41 @@ export default function AdminDashboard() {
         setPeserta(prev => prev.map(p => p.id === editingPeserta.id ? editingPeserta : p));
         setEditingPeserta(null);
       } else {
-        const data = await res.json();
-        alert(data.message || 'Gagal menyimpan perubahan');
+        const err = await res.json();
+        alert(err.message || 'Gagal menyimpan perubahan');
       }
     } catch (err) {
       alert('Terjadi kesalahan koneksi.');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleAddSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsAdding(true);
+    try {
+      const res = await fetch('/api/admin/peserta', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-admin-password': password 
+        },
+        body: JSON.stringify(newPeserta),
+      });
+
+      if (res.ok) {
+        await fetchPeserta(password); // Refresh data
+        setShowAddModal(false);
+        setNewPeserta({ nama_lengkap: '', nama_usaha: '', email: '', no_whatsapp: '' });
+      } else {
+        const err = await res.json();
+        alert(err.message || 'Gagal menambahkan peserta');
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan koneksi.');
+    } finally {
+      setIsAdding(false);
     }
   };
 
@@ -332,6 +365,15 @@ export default function AdminDashboard() {
             >
               <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
             </button>
+            <button 
+              onClick={() => setShowAddModal(true)}
+              className="p-3 bg-blue-600 hover:bg-blue-700 rounded-xl text-white shadow-lg transition-colors flex items-center gap-2"
+              title="Tambah Peserta Manual"
+            >
+              <Plus className="w-5 h-5" />
+              <span className="hidden md:inline font-medium text-sm pr-1">Tambah Peserta</span>
+            </button>
+
             <button 
               onClick={downloadPDF}
               className="p-3 bg-red-600 hover:bg-red-700 rounded-xl text-white shadow-lg transition-colors flex items-center gap-2"
@@ -517,6 +559,89 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+      {/* Add Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+              <h3 className="font-bold text-gray-800 text-lg flex items-center gap-2">
+                <Plus className="w-5 h-5 text-blue-500" />
+                Tambah Peserta
+              </h3>
+              <button 
+                onClick={() => setShowAddModal(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <form onSubmit={handleAddSubmit} className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap</label>
+                <input
+                  type="text"
+                  required
+                  value={newPeserta.nama_lengkap}
+                  onChange={(e) => setNewPeserta({...newPeserta, nama_lengkap: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-800"
+                  placeholder="Misal: Budi Santoso"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Usaha</label>
+                <input
+                  type="text"
+                  required
+                  value={newPeserta.nama_usaha}
+                  onChange={(e) => setNewPeserta({...newPeserta, nama_usaha: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-800"
+                  placeholder="Misal: Toko Berkah"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email (Opsional)</label>
+                <input
+                  type="email"
+                  value={newPeserta.email}
+                  onChange={(e) => setNewPeserta({...newPeserta, email: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-800"
+                  placeholder="budi@email.com"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nomor WhatsApp</label>
+                <input
+                  type="tel"
+                  required
+                  value={newPeserta.no_whatsapp}
+                  onChange={(e) => setNewPeserta({...newPeserta, no_whatsapp: e.target.value})}
+                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-800"
+                  placeholder="0812..."
+                />
+              </div>
+              
+              <div className="pt-4 flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="flex-1 py-3 text-gray-600 bg-gray-100 hover:bg-gray-200 font-medium rounded-xl transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={isAdding}
+                  className="flex-1 py-3 text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-xl shadow-lg transition-colors flex items-center justify-center disabled:opacity-70"
+                >
+                  {isAdding ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Simpan Data'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

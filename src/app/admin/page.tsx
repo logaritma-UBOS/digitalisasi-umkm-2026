@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Loader2, Users, Download, Lock, RefreshCw, Pencil, Trash2, X, Send, CheckSquare } from 'lucide-react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { Loader2, Users, Download, Lock, RefreshCw, Pencil, Trash2, X, Send, CheckSquare, FileText } from 'lucide-react';
 
 interface Peserta {
   id: string;
@@ -190,14 +192,47 @@ export default function AdminDashboard() {
     }
   };
 
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    
+    doc.setFontSize(16);
+    doc.text("Daftar Peserta Sharing UMKM 2026", 14, 15);
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Total Terdaftar: ${peserta.length} Peserta`, 14, 22);
+
+    const tableData = peserta.map((p, i) => [
+      i + 1,
+      p.nama_lengkap,
+      p.nama_usaha,
+      p.no_whatsapp,
+      new Date(p.created_at).toLocaleString('id-ID', {
+        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+      })
+    ]);
+
+    autoTable(doc, {
+      startY: 28,
+      head: [['No', 'Nama Lengkap', 'Nama Usaha', 'No WhatsApp', 'Waktu Daftar']],
+      body: tableData,
+      theme: 'striped',
+      headStyles: { fillColor: [37, 99, 235] },
+      styles: { fontSize: 9 },
+    });
+
+    doc.save('Data_Peserta_UMKM_2026.pdf');
+  };
+
   const downloadCSV = () => {
-    const headers = ['Nama Lengkap,Nama Usaha,Email,No WhatsApp,Waktu Daftar'];
+    // FIX: Gunakan titik koma (;) agar otomatis dibaca rapi oleh Excel Indonesia
+    const headers = ['Nama Lengkap;Nama Usaha;Email;No WhatsApp;Waktu Daftar'];
     const csvRows = peserta.map(p => {
       const date = new Date(p.created_at).toLocaleString('id-ID');
-      return `"${p.nama_lengkap}","${p.nama_usaha}","${p.email}","${p.no_whatsapp}","${date}"`;
+      return `"${p.nama_lengkap}";"${p.nama_usaha}";"${p.email}";"${p.no_whatsapp}";"${date}"`;
     });
     
-    const csvContent = [headers, ...csvRows].join('\n');
+    // FIX: Tambahkan BOM (\uFEFF) agar karakter UTF-8 dibaca sempurna oleh Excel
+    const csvContent = "\uFEFF" + [headers, ...csvRows].join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -298,9 +333,18 @@ export default function AdminDashboard() {
               <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
             </button>
             <button 
+              onClick={downloadPDF}
+              className="p-3 bg-red-600 hover:bg-red-700 rounded-xl text-white shadow-lg transition-colors flex items-center gap-2"
+              title="Download PDF"
+            >
+              <FileText className="w-5 h-5" />
+              <span className="hidden md:inline font-medium text-sm pr-1">Export PDF</span>
+            </button>
+
+            <button 
               onClick={downloadCSV}
               className="p-3 bg-green-600 hover:bg-green-700 rounded-xl text-white shadow-lg transition-colors flex items-center gap-2"
-              title="Download CSV / Excel"
+              title="Download Excel / CSV"
             >
               <Download className="w-5 h-5" />
               <span className="hidden md:inline font-medium text-sm pr-1">Export Excel</span>

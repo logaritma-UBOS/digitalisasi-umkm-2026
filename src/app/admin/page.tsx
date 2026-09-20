@@ -241,16 +241,22 @@ export default function AdminDashboard() {
       p.no_whatsapp,
       new Date(p.created_at).toLocaleString('id-ID', {
         day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
-      })
+      }),
+      // Kolom TTD: Zig-zag format standar absensi
+      i % 2 === 0 ? `${i + 1}. ` : `       ${i + 1}. `
     ]);
 
     autoTable(doc, {
       startY: 28,
-      head: [['No', 'Nama Lengkap', 'Nama Usaha', 'No WhatsApp', 'Waktu Daftar']],
+      head: [['No', 'Nama Lengkap', 'Nama Usaha', 'No WhatsApp', 'Waktu Daftar', 'TTD / Kehadiran']],
       body: tableData,
-      theme: 'striped',
-      headStyles: { fillColor: [37, 99, 235] },
-      styles: { fontSize: 9 },
+      theme: 'grid', // Menggunakan grid agar ada garis kotak yang jelas untuk tanda tangan
+      headStyles: { fillColor: [37, 99, 235], halign: 'center' },
+      styles: { fontSize: 9, cellPadding: 4, valign: 'middle' },
+      columnStyles: {
+        0: { halign: 'center' },
+        5: { cellWidth: 35, halign: 'left' } // Memastikan kolom TTD cukup lebar
+      }
     });
 
     doc.save('Data_Peserta_UMKM_2026.pdf');

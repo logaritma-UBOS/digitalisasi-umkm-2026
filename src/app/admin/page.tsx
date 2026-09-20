@@ -261,7 +261,19 @@ export default function AdminDashboard() {
     const headers = ['Nama Lengkap;Nama Usaha;Email;No WhatsApp;Waktu Daftar'];
     const csvRows = peserta.map(p => {
       const date = new Date(p.created_at).toLocaleString('id-ID');
-      return `"${p.nama_lengkap}";"${p.nama_usaha}";"${p.email}";"${p.no_whatsapp}";"${date}"`;
+      // FIX EXCEL: Tambahkan ="" pada kolom nomor WA atau teks angka agar Excel tidak mengubahnya jadi format Scientific (E+12)
+      const formatExcelText = (str: string) => {
+        if (!str) return '""';
+        const cleanStr = String(str).replace(/"/g, '""');
+        // Jika string berisi karakter angka panjang (seperti no WA atau NIK), paksa jadi formula teks
+        if (/^\d{10,}$/.test(cleanStr.replace(/\D/g, ''))) {
+          // Format `="081234"` memaksa Excel membaca ini murni sebagai teks tanpa E+12
+          return `="${cleanStr}"`;
+        }
+        return `"${cleanStr}"`;
+      };
+
+      return `${formatExcelText(p.nama_lengkap)};${formatExcelText(p.nama_usaha)};${formatExcelText(p.email)};${formatExcelText(p.no_whatsapp)};"${date}"`;
     });
     
     // FIX: Tambahkan BOM (\uFEFF) agar karakter UTF-8 dibaca sempurna oleh Excel

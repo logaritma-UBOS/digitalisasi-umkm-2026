@@ -57,7 +57,44 @@ const QUIZ_DATA = [
       "D. Supaya bisa terhindar dari razia petugas pajak"
     ],
     correctAnswer: 1, // Index B
+    points: 100,
     explanation: "Aplikasi kasir memberikan kebebasan. Pemilik tidak perlu lagi datang setiap malam hanya untuk menghitung laci uang, karena semua transaksi dan sisa stok terlacak akurat secara real-time di HP."
+  },
+  {
+    question: "[Tes Psikologis 1] Jika Anda baru mulai berjualan online seminggu dan belum ada satupun pesanan, apa reaksi mental pertama Anda?",
+    options: [
+      "A. Menyimpulkan bahwa jualan online itu bohong/penipuan",
+      "B. Langsung banting harga jual rugi agar cepat laku",
+      "C. Menganalisa ulang foto produk, deskripsi, dan meracik promo baru",
+      "D. Menyerah dan kembali fokus offline saja"
+    ],
+    correctAnswer: 2, // Index C
+    points: 50,
+    explanation: "Mental pebisnis sejati tidak cepat panik. Tidak ada sukses instan; semuanya butuh tes dan perbaikan strategi berkala. (Skor +50)"
+  },
+  {
+    question: "[Tes Psikologis 2] Ada toko sebelah yang meniru persis produk Anda, bahkan berani menjual dengan harga jauh lebih murah. Sikap Anda?",
+    options: [
+      "A. Mendatangi tokonya dan melabrak mereka karena mencuri ide",
+      "B. Membalas dendam dengan ikut banting harga lebih parah",
+      "C. Pasrah karena tidak mau ribut dan memilih diam",
+      "D. Fokus berinovasi memberikan 'Pelayanan/Value Ekstra' yang tidak bisa mereka tiru"
+    ],
+    correctAnswer: 3, // Index D
+    points: 75,
+    explanation: "Produk dan harga mudah ditiru, tapi keramahan, integritas, dan 'Ikatan Emosional' dengan pelanggan adalah benteng yang mustahil dikalahkan pesaing. (Skor +75)"
+  },
+  {
+    question: "[Tes Psikologis 3] Jika tiba-tiba Anda mendapat keuntungan bersih (profit) 5x lipat dari biasanya bulan ini, apa insting pertama Anda?",
+    options: [
+      "A. Langsung DP motor/mobil baru sebagai 'self-reward' / penghargaan diri",
+      "B. Menahan keinginan konsumtif dan memutar mayoritas uangnya kembali untuk modal/iklan",
+      "C. Mentraktir teman-teman agar terlihat sukses",
+      "D. Dibiarkan menumpuk di rekening pribadi bercampur dengan uang belanja dapur"
+    ],
+    correctAnswer: 1, // Index B
+    points: 80,
+    explanation: "Kemampuan menunda kepuasan (Delayed Gratification) adalah penentu umur bisnis. Profit tak terduga adalah bensin roket untuk membesarkan kerajaan bisnis Anda, bukan untuk gaya hidup semata. (Skor +80)"
   }
 ];
 
@@ -84,7 +121,8 @@ export default function KuisUMKM() {
     setIsAnswered(true);
 
     if (index === QUIZ_DATA[currentQ].correctAnswer) {
-      setScore(prev => prev + 100);
+      // Tambahkan poin dinamis jika ada, kalau tidak default 100
+      setScore(prev => prev + (QUIZ_DATA[currentQ].points || 100));
     }
   };
 
@@ -149,7 +187,9 @@ export default function KuisUMKM() {
   }
 
   if (showResult) {
-    const isPerfect = score === QUIZ_DATA.length * 100;
+    // Hitung poin maksimal secara dinamis
+    const maxScore = QUIZ_DATA.reduce((sum, q) => sum + (q.points || 100), 0);
+    const isPerfect = score === maxScore;
     return (
       <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 md:p-10 text-center border border-gray-100 animate-in zoom-in duration-500">

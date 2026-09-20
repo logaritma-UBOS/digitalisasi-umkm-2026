@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import { Loader2, Search, CheckCircle2, XCircle, Ticket, MapPin, Calendar, Clock, DownloadCloud } from 'lucide-react';
 import Link from 'next/link';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 
 export default function CekTiket() {
   const [phone, setPhone] = useState('');
@@ -44,22 +44,23 @@ export default function CekTiket() {
   const handleDownload = async () => {
     if (!ticketRef.current) return;
     setIsDownloading(true);
+    
     try {
-      // Tunggu font & aset termuat sempurna dengan skala 2x resolusi untuk HD
-      const canvas = await html2canvas(ticketRef.current, { 
-        scale: 2, 
+      // Menggunakan html-to-image yang lebih stabil untuk vektor/SVG & bayangan
+      const dataUrl = await toPng(ticketRef.current, { 
+        quality: 1.0,
+        pixelRatio: 2, // Resolusi HD (Retina)
         backgroundColor: '#ffffff',
-        useCORS: true
       });
       
-      const image = canvas.toDataURL("image/png");
       const link = document.createElement("a");
-      link.href = image;
+      link.href = dataUrl;
       const safeName = peserta.nama_lengkap.replace(/[^a-zA-Z0-9]/g, '_');
       link.download = `E-Ticket_UMKM_${safeName}.png`;
       link.click();
-    } catch (e) {
-      alert("Gagal mengunduh gambar tiket. Silakan screenshot layar ini secara manual.");
+    } catch (e: any) {
+      console.error(e);
+      alert("Sistem gagal meng-convert gambar (" + e.message + "). Silakan screenshot manual.");
     } finally {
       setIsDownloading(false);
     }

@@ -86,24 +86,26 @@ export default function CekTiket() {
           </p>
         </div>
 
-        {/* Kotak Pencarian Modern */}
-        <div className="bg-white p-2 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 flex items-center mb-8 animate-in fade-in slide-in-from-bottom-6 duration-500">
-          <form onSubmit={handleCek} className="flex w-full">
-            <div className="pl-4 pr-2 flex items-center justify-center">
-              <Search className="w-5 h-5 text-gray-400" />
+        {/* Kotak Pencarian Mobile-First */}
+        <div className="bg-white p-3 sm:p-2 rounded-[24px] shadow-xl shadow-slate-200/50 border border-slate-100 mb-8 animate-in fade-in slide-in-from-bottom-6 duration-500">
+          <form onSubmit={handleCek} className="flex flex-col sm:flex-row w-full gap-3 sm:gap-0">
+            <div className="flex-1 flex items-center w-full bg-slate-50 sm:bg-transparent rounded-xl sm:rounded-none">
+              <div className="pl-4 pr-2 flex items-center justify-center">
+                <Search className="w-5 h-5 text-gray-400" />
+              </div>
+              <input 
+                type="tel"
+                required
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Contoh: 08123456789"
+                className="flex-1 py-4 px-2 outline-none text-gray-800 bg-transparent font-medium w-full min-w-0"
+              />
             </div>
-            <input 
-              type="tel"
-              required
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="Contoh: 08123456789"
-              className="flex-1 py-4 px-2 outline-none text-gray-800 bg-transparent font-medium"
-            />
             <button 
               type="submit"
               disabled={status === 'loading' || !phone.trim()}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_8px_15px_-5px_rgba(37,99,235,0.4)]"
+              className="w-full sm:w-auto shrink-0 whitespace-nowrap bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 sm:py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_8px_15px_-5px_rgba(37,99,235,0.4)]"
             >
               {status === 'loading' ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Cek Status'}
             </button>

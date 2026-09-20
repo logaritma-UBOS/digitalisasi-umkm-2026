@@ -1,14 +1,18 @@
 'use client';
 
-import { useState } from 'react';
-import { Loader2, Search, CheckCircle2, XCircle, Ticket, MapPin, Calendar, Clock } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Loader2, Search, CheckCircle2, XCircle, Ticket, MapPin, Calendar, Clock, DownloadCloud } from 'lucide-react';
 import Link from 'next/link';
+import html2canvas from 'html2canvas';
 
 export default function CekTiket() {
   const [phone, setPhone] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'found' | 'not-found'>('idle');
   const [peserta, setPeserta] = useState<any>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  
+  const ticketRef = useRef<HTMLDivElement>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const handleCek = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +38,30 @@ export default function CekTiket() {
     } catch (err) {
       setErrorMsg('Terjadi kesalahan koneksi internet');
       setStatus('not-found');
+    }
+  };
+
+  const handleDownload = async () => {
+    if (!ticketRef.current) return;
+    setIsDownloading(true);
+    try {
+      // Tunggu font & aset termuat sempurna dengan skala 2x resolusi untuk HD
+      const canvas = await html2canvas(ticketRef.current, { 
+        scale: 2, 
+        backgroundColor: '#ffffff',
+        useCORS: true
+      });
+      
+      const image = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = image;
+      const safeName = peserta.nama_lengkap.replace(/[^a-zA-Z0-9]/g, '_');
+      link.download = `E-Ticket_UMKM_${safeName}.png`;
+      link.click();
+    } catch (e) {
+      alert("Gagal mengunduh gambar tiket. Silakan screenshot layar ini secara manual.");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -83,49 +111,59 @@ export default function CekTiket() {
 
         {/* Kartu Hasil: Terdaftar (VIP Ticket Style) */}
         {status === 'found' && peserta && (
-          <div className="bg-white rounded-3xl p-8 shadow-2xl shadow-blue-900/5 border border-blue-100 relative overflow-hidden animate-in zoom-in duration-300">
-            {/* Dekorasi Pojok */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-bl-full -mr-10 -mt-10 z-0"></div>
-            
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-8">
-                <CheckCircle2 className="w-10 h-10 text-green-500 drop-shadow-sm" />
-                <div>
-                  <h3 className="font-extrabold text-green-600 text-lg leading-tight uppercase tracking-wider">Terdaftar Resmi</h3>
-                  <p className="text-xs text-gray-400 font-medium">Data diverifikasi oleh sistem</p>
-                </div>
-              </div>
-
-              <div className="space-y-5 mb-8">
-                <div>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Nama Peserta</p>
-                  <p className="text-2xl font-extrabold text-gray-800 tracking-tight">{peserta.nama_lengkap}</p>
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Nama Usaha / Bisnis</p>
-                  <p className="text-lg font-bold text-blue-600">{peserta.nama_usaha}</p>
-                </div>
-              </div>
-
-              <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-4">
-                <div className="flex items-center gap-3 text-sm font-medium text-gray-600">
-                  <Calendar className="w-5 h-5 text-blue-500" />
-                  <span>Senin, 21 September 2026</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm font-medium text-gray-600">
-                  <Clock className="w-5 h-5 text-blue-500" />
-                  <span>08:30 - 11:30 WIB</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm font-medium text-gray-600">
-                  <MapPin className="w-5 h-5 text-blue-500 shrink-0" />
-                  <span className="leading-snug">Aula Kantor DPD PKS Kalimalang, Bekasi</span>
-                </div>
-              </div>
+          <div className="animate-in zoom-in duration-300">
+            <div 
+              ref={ticketRef} 
+              className="bg-white rounded-3xl p-8 shadow-2xl shadow-blue-900/5 border border-blue-100 relative overflow-hidden mb-4"
+            >
+              {/* Dekorasi Pojok */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-bl-full -mr-10 -mt-10 z-0"></div>
               
-              <div className="mt-8 text-center bg-blue-50/50 p-4 rounded-xl border border-blue-100/50">
-                 <p className="text-xs font-semibold text-blue-700">📌 Screenshot halaman ini dan tunjukkan kepada petugas pendaftaran saat Anda tiba besok pagi.</p>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-8">
+                  <CheckCircle2 className="w-10 h-10 text-green-500 drop-shadow-sm" />
+                  <div>
+                    <h3 className="font-extrabold text-green-600 text-lg leading-tight uppercase tracking-wider">Terdaftar Resmi</h3>
+                    <p className="text-xs text-gray-400 font-medium">Data diverifikasi oleh sistem</p>
+                  </div>
+                </div>
+
+                <div className="space-y-5 mb-8">
+                  <div>
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Nama Peserta</p>
+                    <p className="text-2xl font-extrabold text-gray-800 tracking-tight">{peserta.nama_lengkap}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Nama Usaha / Bisnis</p>
+                    <p className="text-lg font-bold text-blue-600">{peserta.nama_usaha}</p>
+                  </div>
+                </div>
+
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-4">
+                  <div className="flex items-center gap-3 text-sm font-medium text-gray-600">
+                    <Calendar className="w-5 h-5 text-blue-500" />
+                    <span>Senin, 21 September 2026</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm font-medium text-gray-600">
+                    <Clock className="w-5 h-5 text-blue-500" />
+                    <span>08:30 - 11:30 WIB</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm font-medium text-gray-600">
+                    <MapPin className="w-5 h-5 text-blue-500 shrink-0" />
+                    <span className="leading-snug">Aula Kantor DPD PKS Kalimalang, Bekasi</span>
+                  </div>
+                </div>
               </div>
             </div>
+
+            <button 
+              onClick={handleDownload}
+              disabled={isDownloading}
+              className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-2xl transition-all flex items-center justify-center gap-2 shadow-[0_10px_20px_-10px_rgba(37,99,235,0.5)] disabled:opacity-70"
+            >
+              {isDownloading ? <Loader2 className="w-6 h-6 animate-spin" /> : <DownloadCloud className="w-6 h-6" />}
+              {isDownloading ? 'Memproses E-Ticket...' : 'Download E-Ticket (Gambar HD)'}
+            </button>
           </div>
         )}
 

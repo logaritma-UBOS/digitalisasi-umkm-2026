@@ -110,14 +110,10 @@ export default function CekTiket() {
           </form>
         </div>
 
-        {/* Kartu Hasil: Terdaftar (VIP Ticket Style) */}
+        {/* Kartu Hasil: Terdaftar (Visible UI - Mobile Friendly) */}
         {status === 'found' && peserta && (
           <div className="animate-in zoom-in duration-300">
-            <div 
-              ref={ticketRef} 
-              className="bg-white rounded-3xl p-8 shadow-2xl shadow-blue-900/5 border border-blue-100 relative overflow-hidden mb-4"
-            >
-              {/* Dekorasi Pojok */}
+            <div className="bg-white rounded-3xl p-8 shadow-2xl shadow-blue-900/5 border border-blue-100 relative overflow-hidden mb-4">
               <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-bl-full -mr-10 -mt-10 z-0"></div>
               
               <div className="relative z-10">
@@ -163,7 +159,7 @@ export default function CekTiket() {
               className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-2xl transition-all flex items-center justify-center gap-2 shadow-[0_10px_20px_-10px_rgba(37,99,235,0.5)] disabled:opacity-70"
             >
               {isDownloading ? <Loader2 className="w-6 h-6 animate-spin" /> : <DownloadCloud className="w-6 h-6" />}
-              {isDownloading ? 'Memproses E-Ticket...' : 'Download E-Ticket (Gambar HD)'}
+              {isDownloading ? 'Memproses E-Card...' : 'Download E-Card (Kartu VIP)'}
             </button>
           </div>
         )}
@@ -185,6 +181,79 @@ export default function CekTiket() {
         )}
 
       </div>
+
+      {/* HIDDEN ATM CARD TEMPLATE (Only for Download Image) */}
+      {status === 'found' && peserta && (
+        <div className="fixed top-[200%] left-[200%] pointer-events-none">
+          <div 
+            ref={ticketRef}
+            className="w-[1011px] h-[638px] rounded-[40px] bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-16 relative overflow-hidden flex flex-col justify-between shadow-2xl"
+            style={{ fontFamily: 'system-ui, sans-serif' }}
+          >
+            {/* Background Ornaments / Glow */}
+            <div className="absolute top-[-200px] right-[-100px] w-[600px] h-[600px] bg-blue-600/40 rounded-full blur-[100px]"></div>
+            <div className="absolute bottom-[-200px] left-[-200px] w-[500px] h-[500px] bg-purple-600/30 rounded-full blur-[100px]"></div>
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-tr from-white/10 to-transparent opacity-50 border-[2px] border-white/20 rounded-[40px]"></div>
+
+            {/* Top Section */}
+            <div className="flex justify-between items-start z-10 w-full">
+              <div>
+                <h2 className="text-[40px] font-black tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-cyan-300 uppercase leading-none">
+                  Sharing UMKM 2026
+                </h2>
+                <p className="text-blue-400/80 tracking-[0.3em] text-xl mt-3 uppercase font-bold">Official E-Ticket VIP</p>
+              </div>
+              <div className="flex items-center gap-6">
+                {/* Contactless Icon */}
+                <svg className="w-14 h-14 text-slate-300/80 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12 18.75h.007v.008H12v-.008z" />
+                </svg>
+                <div className="bg-gradient-to-br from-yellow-300 to-yellow-600 text-slate-900 font-black px-8 py-3 rounded-2xl text-2xl tracking-[0.2em] shadow-lg border-2 border-yellow-200/50">
+                  VIP
+                </div>
+              </div>
+            </div>
+
+            {/* Middle Section: Fake EMV Chip */}
+            <div className="z-10 mt-6">
+              <div className="w-28 h-20 rounded-xl border-2 border-yellow-600/50 bg-gradient-to-br from-yellow-100 via-yellow-300 to-yellow-600 flex items-center justify-center shadow-inner relative overflow-hidden">
+                <div className="absolute w-full h-[2px] bg-yellow-700/30 top-1/2"></div>
+                <div className="absolute h-full w-[2px] bg-yellow-700/30 left-1/3"></div>
+                <div className="absolute h-full w-[2px] bg-yellow-700/30 right-1/3"></div>
+                <div className="w-14 h-10 border-2 border-yellow-700/40 rounded-md"></div>
+              </div>
+            </div>
+
+            {/* Bottom Section */}
+            <div className="flex justify-between items-end z-10 w-full mt-auto">
+              <div className="space-y-8">
+                <div>
+                  <p className="text-slate-400/80 text-lg font-bold tracking-[0.3em] uppercase mb-2">Cardholder Name</p>
+                  <p className="text-5xl font-black tracking-widest uppercase text-white drop-shadow-md truncate max-w-[600px]">
+                    {peserta.nama_lengkap}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-slate-400/80 text-lg font-bold tracking-[0.3em] uppercase mb-2">Business Type</p>
+                  <p className="text-3xl font-bold text-cyan-400 tracking-wider truncate max-w-[600px]">
+                    {peserta.nama_usaha}
+                  </p>
+                </div>
+              </div>
+              
+              {/* Event Info */}
+              <div className="text-right border-l-4 border-slate-700/50 pl-10 space-y-4 pb-2">
+                <p className="text-2xl font-bold text-slate-300 tracking-wider">21 SEPT 2026</p>
+                <p className="text-2xl font-bold text-slate-300 tracking-wider">08:30 WIB</p>
+                <p className="text-xl font-black text-blue-400 tracking-[0.2em] uppercase mt-6 bg-blue-900/40 px-4 py-2 rounded-lg border border-blue-500/30">
+                  DPD PKS Kalimalang
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </main>
   );
 }

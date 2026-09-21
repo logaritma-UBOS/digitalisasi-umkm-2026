@@ -13,6 +13,8 @@ export default function KuisLiveLeaderboard() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const [kuisStatus, setKuisStatus] = useState<'WAITING' | 'STARTED'>('WAITING');
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
 
   const fetchLeaderboard = async () => {
     try {
@@ -29,12 +31,42 @@ export default function KuisLiveLeaderboard() {
     }
   };
 
+  const fetchStatus = async () => {
+    try {
+      const res = await fetch('/api/kuis-state');
+      const data = await res.json();
+      setKuisStatus(data.status);
+    } catch (e) {
+      console.error('Failed to fetch status');
+    }
+  };
+
   useEffect(() => {
     fetchLeaderboard();
-    // Auto refresh setiap 3 detik
-    const interval = setInterval(fetchLeaderboard, 3000);
+    fetchStatus();
+    // Auto refresh setiap 2.5 detik
+    const interval = setInterval(() => {
+      fetchLeaderboard();
+      fetchStatus();
+    }, 2500);
     return () => clearInterval(interval);
   }, []);
+
+  const handleUpdateStatus = async (newStatus: 'WAITING' | 'STARTED') => {
+    setIsUpdatingStatus(true);
+    try {
+      await fetch('/api/kuis-state', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus, startTime: Date.now() })
+      });
+      setKuisStatus(newStatus);
+    } catch(e) {
+      alert('Gagal update status');
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-slate-950 flex flex-col p-8 overflow-hidden text-slate-100 font-sans relative">
@@ -45,7 +77,7 @@ export default function KuisLiveLeaderboard() {
       </div>
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-12">
+      <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300 tracking-tight">
             Live Leaderboard
@@ -64,6 +96,28 @@ export default function KuisLiveLeaderboard() {
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Operator Controls */}
+      <div className="flex flex-col items-center justify-center gap-2 mb-10 bg-slate-900/50 p-6 rounded-3xl border border-slate-800">
+        <p className="text-slate-400 text-sm font-semibold uppercase tracking-widest mb-2">Panel Operator</p>
+        {kuisStatus === 'WAITING' ? (
+          <button 
+            onClick={() => handleUpdateStatus('STARTED')}
+            disabled={isUpdatingStatus}
+            className="px-10 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-2xl shadow-[0_0_40px_rgba(37,99,235,0.4)] transition-all flex items-center gap-3 disabled:opacity-50 hover:scale-105 active:scale-95"
+          >
+            🚀 MULAI KUIS SEKARANG!
+          </button>
+        ) : (
+          <button 
+            onClick={() => handleUpdateStatus('WAITING')}
+            disabled={isUpdatingStatus}
+            className="px-8 py-3 bg-red-900/50 hover:bg-red-800/50 text-red-200 border border-red-700/50 rounded-xl font-bold transition-all flex items-center gap-3 disabled:opacity-50"
+          >
+            ⏹ Kunci Ruangan (Reset ke Menunggu)
+          </button>
+        )}
       </div>
 
       {/* Main Content */}

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { CheckCircle2, XCircle, ArrowRight, Trophy, Sparkles } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { CheckCircle2, XCircle, ArrowRight, Trophy, Sparkles, Loader2 } from 'lucide-react';
 
 const QUIZ_DATA = [
   {
@@ -109,10 +109,46 @@ export default function KuisUMKM() {
   const [startTime, setStartTime] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleStart = () => {
+  const [isWaitingHost, setIsWaitingHost] = useState(false);
+
+  useEffect(() => {
+    if (!isWaitingHost) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch('/api/kuis-state');
+        const data = await res.json();
+        if (data.status === 'STARTED') {
+          setStarted(true);
+          setStartTime(data.startTime || Date.now());
+          setIsWaitingHost(false);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [isWaitingHost]);
+
+  const handleJoinRoom = async () => {
     if (!nama.trim()) return alert('Mohon isi nama Anda terlebih dahulu!');
-    setStarted(true);
-    setStartTime(Date.now());
+    
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('/api/kuis-state');
+      const data = await res.json();
+      if (data.status === 'STARTED') {
+        setStarted(true);
+        setStartTime(data.startTime || Date.now());
+      } else {
+        setIsWaitingHost(true);
+      }
+    } catch (e) {
+      setIsWaitingHost(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleAnswer = (index: number) => {
@@ -152,6 +188,22 @@ export default function KuisUMKM() {
     }
   };
 
+  if (isWaitingHost) {
+    return (
+      <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-gray-100 animate-in fade-in zoom-in duration-500 text-center">
+          <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">Bersiaplah, {nama}!</h1>
+          <p className="text-gray-500 mb-8 leading-relaxed text-sm">
+            Menunggu operator memulai kuis... Pastikan mata Anda fokus ke layar proyektor di depan!
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   if (!started) {
     return (
       <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
@@ -176,10 +228,11 @@ export default function KuisUMKM() {
           </div>
 
           <button 
-            onClick={handleStart}
-            className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-[0_8px_20px_-6px_rgba(37,99,235,0.4)] hover:-translate-y-0.5 active:translate-y-0"
+            onClick={handleJoinRoom}
+            disabled={isSubmitting}
+            className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-[0_8px_20px_-6px_rgba(37,99,235,0.4)] flex justify-center items-center gap-2 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70"
           >
-            Mulai Adu Cepat!
+            {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Siap Ikut Kuis!'}
           </button>
         </div>
       </main>

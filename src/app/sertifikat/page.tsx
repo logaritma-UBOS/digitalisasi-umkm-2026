@@ -1,9 +1,14 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Search, Loader2, Download, AlertCircle, Award, CheckCircle2, ChevronLeft } from 'lucide-react';
+import { Search, Loader2, Download, AlertCircle, Award, CheckCircle2 } from 'lucide-react';
 import * as htmlToImage from 'html-to-image';
-import Link from 'next/link';
+import { Poppins } from 'next/font/google';
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+});
 
 export default function SertifikatPage() {
   const [phone, setPhone] = useState('');
@@ -62,12 +67,7 @@ export default function SertifikatPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 font-sans relative overflow-hidden">
-      
-      {/* Tombol Kembali */}
-      <Link href="/" className="absolute top-6 left-6 flex items-center gap-2 text-blue-600 font-semibold hover:text-blue-800 transition-colors bg-white px-4 py-2 rounded-full shadow-sm">
-        <ChevronLeft className="w-5 h-5" /> Kembali
-      </Link>
+    <main className={`min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 relative overflow-hidden ${poppins.className}`}>
 
       <div className="max-w-xl w-full z-10">
         <div className="text-center mb-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -140,8 +140,8 @@ export default function SertifikatPage() {
       <div className="fixed top-[200%] pointer-events-none">
         <div 
           ref={certificateRef}
-          className="w-[1123px] h-[794px] bg-white relative overflow-hidden flex flex-col items-center text-center shadow-2xl border-[24px] border-[#3b0764]"
-          style={{ fontFamily: "'Inter', 'Segoe UI', Roboto, sans-serif", boxSizing: 'border-box' }}
+          className={`w-[1123px] h-[794px] bg-[#fcfbf8] relative overflow-hidden flex flex-col shadow-2xl border-[24px] border-[#3b0764] ${poppins.className}`}
+          style={{ boxSizing: 'border-box' }}
         >
           {/* Top Left "20 26" Box */}
           <div className="absolute top-0 left-0 w-[200px] h-[380px] bg-[#3b0764] overflow-hidden flex flex-col items-center pt-12 z-0 rounded-br-[40px]">

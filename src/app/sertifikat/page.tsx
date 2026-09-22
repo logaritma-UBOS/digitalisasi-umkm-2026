@@ -140,51 +140,76 @@ export default function SertifikatPage() {
       <div className="fixed top-[200%] pointer-events-none">
         <div 
           ref={certificateRef}
-          className="w-[1123px] h-[794px] bg-gradient-to-br from-slate-50 to-blue-50 relative overflow-hidden border-[16px] border-double border-blue-900 flex flex-col items-center text-center font-sans"
+          className="w-[1123px] h-[794px] bg-white relative overflow-hidden flex flex-col items-center text-center font-sans shadow-2xl"
         >
-          {/* Header Graphic */}
-          <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-blue-700 to-indigo-900 shadow-xl"></div>
-          
-          <Award className="w-24 h-24 text-yellow-500 drop-shadow-md mb-6 mt-16 z-10" />
-          
-          <h1 className="text-[54px] font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-900 to-indigo-700 tracking-[0.2em] uppercase mb-2 z-10">
-            Sertifikat Penghargaan
-          </h1>
-          
-          <p className="text-2xl text-blue-800/80 tracking-widest mb-16 z-10 uppercase font-semibold">
-            Diberikan dengan penuh rasa bangga kepada:
-          </p>
-          
-          <h2 className="text-[68px] font-bold text-slate-900 mb-8 font-serif italic border-b-[3px] border-slate-300 pb-4 px-24 z-10">
-            {namaPeserta}
-          </h2>
-          
-          <p className="text-3xl text-slate-700 max-w-4xl leading-snug z-10 font-medium">
-            Atas partisipasi dan antusiasmenya sebagai <strong className="text-blue-800 font-bold">PESERTA</strong> dalam acara<br/>
-            <span className="text-blue-900 font-bold mt-2 inline-block">"Sharing UMKM: Dari Manual ke Digital"</span><br/>
-            <span className="text-2xl text-slate-500">Solusi Anti Ribet Catat Keuangan & Tarik Pembeli</span>
-          </p>
-          
-          <p className="text-2xl text-slate-500 mt-10 font-semibold z-10">Bekasi, 21 September 2026</p>
-          
-          {/* Signatures */}
-          <div className="flex justify-between w-full max-w-4xl mt-auto pt-8 mb-12 z-10">
-            <div className="text-center">
-              <div className="w-64 h-32 border-b-2 border-slate-400 relative">
-                 {/* Fake Signature Vector could go here, for now empty space for actual signature */}
-              </div>
-              <p className="font-bold text-2xl text-slate-800 mt-4">Ketua Pelaksana</p>
-            </div>
-            <div className="text-center">
-              <div className="w-64 h-32 border-b-2 border-slate-400 relative">
-              </div>
-              <p className="font-bold text-2xl text-slate-800 mt-4">Pemateri Ahli</p>
-            </div>
+          {/* GEOMETRIC HEADER (Reference Image 2) */}
+          <svg width="100%" height="320" viewBox="0 0 1123 320" preserveAspectRatio="none" className="absolute top-0 left-0 w-full h-[320px] z-0">
+            {/* Geometric Polygons Pattern */}
+            <polygon points="0,0 400,0 500,280 0,320" fill="#e11d48" /> {/* Red */}
+            <polygon points="300,0 800,0 650,320 400,280" fill="#0ea5e9" /> {/* Light Blue */}
+            <polygon points="700,0 1123,0 1123,240 600,320" fill="#0d9488" /> {/* Teal */}
+            <polygon points="900,0 1123,0 1123,120" fill="#facc15" /> {/* Yellow */}
+            <polygon points="0,0 250,0 200,180 0,120" fill="#be123c" /> {/* Darker Red */}
+            <polygon points="800,0 950,0 900,100 850,50" fill="#14b8a6" /> {/* Lighter Teal */}
+            
+            {/* Curved White Bottom Overlay */}
+            <path d="M0,280 C350,80 750,80 1123,220 L1123,320 L0,320 Z" fill="#ffffff" />
+          </svg>
+
+          {/* LOGO (Reference Image 3) */}
+          <img 
+            src="/logo-sharing-umkm.jpg" 
+            alt="Logo UMKM" 
+            className="absolute top-12 left-16 w-[120px] h-[120px] object-contain rounded-full shadow-md z-10 border-4 border-white bg-white"
+          />
+
+          {/* TEXT CONTENT */}
+          <div className="z-10 mt-[170px] flex flex-col items-center w-full px-20">
+            <h1 className="text-[68px] font-medium text-slate-900 tracking-[0.25em] mb-1 uppercase">
+              SERTIFIKAT
+            </h1>
+            
+            <p className="text-[17px] text-slate-700 tracking-wider mb-12 font-medium">
+              NOMOR: 001/UMKM-DIGITAL/IX/2026
+            </p>
+            
+            <p className="text-[20px] font-bold text-slate-800 tracking-widest mb-6 uppercase">
+              Sertifikat Ini Diberikan Kepada
+            </p>
+            
+            <h2 className="text-[60px] font-bold text-teal-600 mb-6 border-b-2 border-slate-300 pb-2 px-20 capitalize">
+              {namaPeserta}
+            </h2>
+            
+            <p className="text-[22px] font-medium text-slate-600 tracking-wide mb-4 uppercase">
+              Atas Partisipasinya Sebagai <span className="font-black text-slate-900">PESERTA</span>
+            </p>
+            
+            <p className="text-[17px] text-slate-500 max-w-4xl leading-relaxed font-medium uppercase px-12">
+              Pada Kegiatan <strong className="text-slate-600">Bimbingan Teknis "Sharing UMKM: Dari Manual Ke Digital"</strong><br/>
+              Solusi Anti Ribet Catat Keuangan & Tarik Pembeli<br/>
+              Yang Dilaksanakan Pada Senin, 21 September 2026 Pukul 08.30 - 11.30 WIB.
+            </p>
           </div>
           
-          {/* Decorative Corner Elements */}
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-100 rounded-tr-full opacity-50 -z-0"></div>
-          <div className="absolute bottom-0 right-0 w-64 h-64 bg-indigo-100 rounded-tl-full opacity-50 -z-0"></div>
+          {/* SIGNATURES */}
+          <div className="flex justify-between w-full max-w-[900px] mt-auto pb-12 z-10 px-8">
+            <div className="text-center w-72">
+              <p className="text-[17px] text-slate-500 mb-20">Ketua Pelaksana</p>
+              <div className="border-b-[1px] border-slate-400 mx-auto w-full relative">
+                 {/* Empty space for actual signature */}
+              </div>
+              <p className="font-bold text-[18px] text-slate-700 mt-2">Wendi Suwandana</p>
+            </div>
+            
+            <div className="text-center w-72">
+              <p className="text-[17px] text-slate-500 mb-1">Bekasi, 21 September 2026</p>
+              <p className="text-[17px] text-slate-500 mb-12">Pemateri Ahli</p>
+              <div className="border-b-[1px] border-slate-400 mx-auto w-full relative">
+              </div>
+              <p className="font-bold text-[18px] text-slate-700 mt-2">Logaritma Team</p>
+            </div>
+          </div>
         </div>
       </div>
 

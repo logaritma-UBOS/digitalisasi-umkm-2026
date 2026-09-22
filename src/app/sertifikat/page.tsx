@@ -207,8 +207,8 @@ export default function SertifikatPage() {
           </div>
 
           {/* Logo Section */}
-          <div className="absolute top-[50px] left-[230px] z-10 flex items-center gap-4">
-             <img src="/logo-sharing-umkm.jpg" className="w-[80px] h-[80px] object-contain rounded-full shadow-sm" />
+          <div className="absolute top-[40px] left-[220px] z-10 flex items-center gap-4">
+             <img src="/logo-sharing-umkm.jpg" className="w-[70px] h-[70px] object-contain rounded-full shadow-sm" />
              <div className="text-left leading-tight">
                 <p className="text-[14px] font-black text-[#3b0764]">DIGITALISASI UMKM</p>
                 <p className="text-[12px] font-bold text-gray-500">KOTA BEKASI 2026</p>
@@ -216,21 +216,21 @@ export default function SertifikatPage() {
           </div>
 
           {/* MAIN CONTENT AREA */}
-          <div className="z-10 flex flex-col items-center justify-center w-full h-full px-[240px] pt-[70px]">
-            <h1 className="text-[100px] font-black text-[#3b0764] tracking-tight mb-2 capitalize" style={{ letterSpacing: '-0.02em' }}>
+          <div className="relative z-10 flex flex-col items-center justify-start w-full h-full px-[180px] pt-[60px] pb-[40px]">
+            <h1 className="text-[90px] font-black text-[#3b0764] tracking-tight mb-0 capitalize" style={{ letterSpacing: '-0.02em' }}>
               Sertifikat
             </h1>
             
-            <p className="text-[16px] font-bold text-[#3b0764] tracking-widest mb-10">
+            <p className="text-[15px] font-bold text-[#3b0764] tracking-widest mb-6">
               Nomor : 042/Pan-SharingUMKM/IX/2026
             </p>
             
-            <p className="text-[20px] text-gray-700 font-medium mb-3">
+            <p className="text-[18px] text-gray-700 font-medium mb-2">
               Diberikan Kepada:
             </p>
             
-            <div className="w-full border-b-[3px] border-[#3b0764] mb-5 flex justify-center pb-2">
-              <h2 className="text-[52px] font-black text-[#3b0764] capitalize truncate px-8 max-w-[800px]">
+            <div className="w-full border-b-[3px] border-[#3b0764] mb-4 flex justify-center pb-2">
+              <h2 className="text-[52px] font-black text-[#3b0764] capitalize truncate px-8 max-w-[700px]">
                 {namaPeserta}
               </h2>
             </div>
@@ -239,23 +239,23 @@ export default function SertifikatPage() {
               Sebagai :
             </p>
             
-            <p className="text-[32px] font-black text-[#3b0764] mb-6">
+            <p className="text-[28px] font-black text-[#3b0764] mb-4">
               Peserta
             </p>
             
-            <p className="text-[15px] text-gray-700 max-w-[700px] leading-[1.6] font-medium text-center">
+            <p className="text-[14px] text-gray-700 max-w-[650px] leading-[1.6] font-medium text-center">
               Acara Edukasi dan Bimbingan Teknis <strong className="text-[#3b0764]">"Sharing UMKM: Dari Manual Ke Digital - Solusi Anti Ribet Catat Keuangan & Tarik Pembeli"</strong> yang diselenggarakan di Aula Kantor DPD PKS Kalimalang pada tanggal 21 September 2026.
             </p>
 
             {/* Signatures */}
-            <div className="flex justify-between w-full max-w-[700px] mt-12 z-10 px-4">
+            <div className="flex justify-between w-full max-w-[650px] mt-auto pt-6 z-10 px-4">
               <div className="text-center w-64">
-                <p className="text-[14px] font-bold text-[#3b0764] mb-20">Ketua Pelaksana</p>
+                <p className="text-[14px] font-bold text-[#3b0764] mb-16">Ketua Pelaksana</p>
                 <p className="font-bold text-[16px] text-[#3b0764] border-b-[2px] border-[#3b0764] pb-1 inline-block px-4">Wendi Suwandana</p>
               </div>
               
               <div className="text-center w-64">
-                <p className="text-[14px] font-bold text-[#3b0764] mb-20">Pemateri Ahli</p>
+                <p className="text-[14px] font-bold text-[#3b0764] mb-16">Pemateri Ahli</p>
                 <p className="font-bold text-[16px] text-[#3b0764] border-b-[2px] border-[#3b0764] pb-1 inline-block px-4">Logaritma Team</p>
               </div>
             </div>

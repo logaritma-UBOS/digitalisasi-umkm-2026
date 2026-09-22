@@ -144,7 +144,7 @@ export default function SertifikatPage() {
           style={{ boxSizing: 'border-box' }}
         >
           {/* Top Left "20 26" Box */}
-          <div className="absolute top-0 left-0 w-[200px] h-[380px] bg-[#3b0764] overflow-hidden flex flex-col items-center pt-12 z-0 rounded-br-[40px]">
+          <div className="absolute top-0 left-0 w-[180px] h-[340px] bg-[#3b0764] overflow-hidden flex flex-col items-center pt-8 z-0 rounded-br-[60px]">
             {/* Topo lines SVG */}
             <svg viewBox="0 0 200 400" className="absolute inset-0 w-full h-full opacity-20 z-0">
               <path d="M-50,50 Q50,-20 150,50 T350,50" stroke="white" strokeWidth="2" fill="none"/>
@@ -153,111 +153,108 @@ export default function SertifikatPage() {
               <path d="M-20,200 C80,100 120,300 250,200" stroke="white" strokeWidth="2" fill="none"/>
               <path d="M-20,230 C80,130 120,330 250,230" stroke="white" strokeWidth="2" fill="none"/>
               <path d="M-20,260 C80,160 120,360 250,260" stroke="white" strokeWidth="2" fill="none"/>
-              <path d="M-20,290 C80,190 120,390 250,290" stroke="white" strokeWidth="2" fill="none"/>
             </svg>
-            <span className="text-white font-black text-[100px] leading-[0.85] z-10">20</span>
-            <span className="text-white font-black text-[100px] leading-[0.85] z-10">26</span>
+            <span className="text-white font-black text-[90px] leading-[0.85] z-10">20</span>
+            <span className="text-white font-black text-[90px] leading-[0.85] z-10">26</span>
+          </div>
+
+          {/* Bottom Left Geometric Shapes */}
+          <div className="absolute bottom-0 left-0 grid grid-cols-3 w-[150px] h-[200px] z-0 opacity-100">
+            <div className="bg-[#7e22ce] rounded-tr-full"></div>
+            <div className="bg-[#3b0764] rounded-bl-full"></div>
+            <div className="bg-[#c026d3] rounded-br-full"></div>
+            <div className="bg-[#c026d3] rounded-tl-full"></div>
+            <div className="bg-[#7e22ce] rounded-tr-full"></div>
+            <div className="bg-[#3b0764] rounded-bl-full"></div>
+            <div className="bg-[#3b0764] rounded-br-full"></div>
+            <div className="bg-[#c026d3] rounded-tl-full"></div>
+            <div className="bg-[#7e22ce] rounded-tr-full"></div>
+            <div className="bg-[#7e22ce] rounded-bl-full"></div>
+            <div className="bg-[#3b0764] rounded-br-full"></div>
+            <div className="bg-[#c026d3] rounded-tl-full"></div>
+          </div>
+
+          {/* Top Right Geometric Shapes */}
+          <div className="absolute top-0 right-0 grid grid-cols-3 w-[150px] h-[200px] z-0 opacity-100">
+            <div className="bg-[#3b0764] rounded-br-full"></div>
+            <div className="bg-[#c026d3] rounded-bl-full"></div>
+            <div className="bg-[#7e22ce] rounded-tl-full"></div>
+            <div className="bg-[#c026d3] rounded-tr-full"></div>
+            <div className="bg-[#3b0764] rounded-full scale-75"></div>
+            <div className="bg-[#7e22ce] rounded-br-full"></div>
+            <div className="bg-[#7e22ce] rounded-bl-full"></div>
+            <div className="bg-[#3b0764] rounded-tl-full"></div>
+            <div className="bg-[#c026d3] rounded-tr-full"></div>
+            <div className="bg-[#c026d3] rounded-br-full"></div>
+            <div className="bg-[#7e22ce] rounded-bl-full"></div>
+            <div className="bg-[#3b0764] rounded-tl-full"></div>
           </div>
 
           {/* Bottom Right Vertical Box */}
-          <div className="absolute bottom-0 right-0 w-[160px] h-[380px] bg-[#3b0764] overflow-hidden flex items-center justify-center z-0 rounded-tl-[40px]">
+          <div className="absolute bottom-0 right-0 w-[140px] h-[380px] bg-[#3b0764] overflow-hidden flex items-center justify-center z-0 rounded-tl-[60px]">
             <svg viewBox="0 0 160 400" className="absolute inset-0 w-full h-full opacity-20 z-0">
               <path d="M-50,50 Q50,-20 150,50 T350,50" stroke="white" strokeWidth="2" fill="none"/>
               <path d="M-50,80 Q50,10 150,80 T350,80" stroke="white" strokeWidth="2" fill="none"/>
               <path d="M-20,200 C80,100 120,300 250,200" stroke="white" strokeWidth="2" fill="none"/>
               <path d="M-20,230 C80,130 120,330 250,230" stroke="white" strokeWidth="2" fill="none"/>
             </svg>
-            <span className="text-white font-black text-[54px] tracking-widest z-10" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+            <span className="text-white font-black text-[44px] tracking-widest z-10 whitespace-nowrap" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
               SHARING UMKM
             </span>
           </div>
 
-          {/* Top Right Geometric Shapes */}
-          <div className="absolute top-[40px] right-0 grid grid-cols-3 w-[180px] h-[240px] z-0 opacity-100">
-            <div className="bg-[#7e22ce] rounded-br-full"></div>
-            <div className="bg-[#3b0764] rounded-bl-full"></div>
-            <div className="bg-[#c026d3] rounded-tl-full"></div>
-            
-            <div className="bg-[#a21caf] rounded-tr-full"></div>
-            <div className="bg-[#7e22ce] rounded-full scale-75"></div>
-            <div className="bg-[#3b0764] rounded-br-full"></div>
-            
-            <div className="bg-[#c026d3] rounded-bl-full"></div>
-            <div className="bg-[#a21caf] rounded-tl-full"></div>
-            <div className="bg-[#7e22ce] rounded-tr-full"></div>
-            
-            <div className="bg-[#3b0764] rounded-br-full"></div>
-            <div className="bg-[#c026d3] rounded-bl-full"></div>
-            <div className="bg-[#a21caf] rounded-tl-full"></div>
-          </div>
-
-          {/* Bottom Left Geometric Shapes */}
-          <div className="absolute bottom-[40px] left-[176px] grid grid-cols-3 w-[180px] h-[180px] z-0 opacity-100">
-            <div className="bg-[#3b0764] rounded-tr-full"></div>
-            <div className="bg-[#7e22ce] rounded-bl-full"></div>
-            <div className="bg-[#c026d3] rounded-br-full"></div>
-            
-            <div className="bg-[#a21caf] rounded-tl-full"></div>
-            <div className="bg-[#3b0764] rounded-tr-full"></div>
-            <div className="bg-[#7e22ce] rounded-bl-full"></div>
-            
-            <div className="bg-[#c026d3] rounded-br-full"></div>
-            <div className="bg-[#a21caf] rounded-tl-full"></div>
-            <div className="bg-[#3b0764] rounded-tr-full"></div>
-          </div>
-
           {/* Logo Section */}
-          <div className="absolute top-[40px] left-[220px] z-10 flex items-center gap-4">
-             <img src="/logo-sharing-umkm.jpg" className="w-[70px] h-[70px] object-contain rounded-full shadow-sm" />
+          <div className="absolute top-[30px] left-[200px] z-10 flex items-center gap-3">
+             <img src="/logo-sharing-umkm.jpg" className="w-[60px] h-[60px] object-contain rounded-full shadow-sm" />
              <div className="text-left leading-tight">
-                <p className="text-[14px] font-black text-[#3b0764]">DIGITALISASI UMKM</p>
-                <p className="text-[12px] font-bold text-gray-500">KOTA BEKASI 2026</p>
+                <p className="text-[12px] font-black text-[#3b0764]">DIGITALISASI UMKM</p>
+                <p className="text-[10px] font-bold text-gray-500">KOTA BEKASI 2026</p>
              </div>
           </div>
 
           {/* MAIN CONTENT AREA */}
-          <div className="relative z-10 flex flex-col items-center justify-start w-full h-full px-[180px] pt-[60px] pb-[40px]">
-            <h1 className="text-[90px] font-black text-[#3b0764] tracking-tight mb-0 capitalize" style={{ letterSpacing: '-0.02em' }}>
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-start px-[180px] pt-[75px] pointer-events-none">
+            <h1 className="text-[85px] font-black text-[#3b0764] tracking-tight mb-2 capitalize leading-none" style={{ letterSpacing: '-0.02em' }}>
               Sertifikat
             </h1>
             
-            <p className="text-[15px] font-bold text-[#3b0764] tracking-widest mb-6">
+            <p className="text-[14px] font-bold text-[#3b0764] tracking-widest mb-10">
               Nomor : 042/Pan-SharingUMKM/IX/2026
             </p>
             
-            <p className="text-[18px] text-gray-700 font-medium mb-2">
+            <p className="text-[16px] text-gray-700 font-medium mb-2">
               Diberikan Kepada:
             </p>
             
-            <div className="w-full border-b-[3px] border-[#3b0764] mb-4 flex justify-center pb-2">
-              <h2 className="text-[52px] font-black text-[#3b0764] capitalize truncate px-8 max-w-[700px]">
+            <div className="w-full border-b-[2px] border-[#3b0764] mb-4 flex justify-center pb-2 px-10">
+              <h2 className="text-[48px] font-black text-[#3b0764] capitalize truncate w-full text-center">
                 {namaPeserta}
               </h2>
             </div>
             
-            <p className="text-[18px] text-gray-700 font-medium mb-1">
+            <p className="text-[16px] text-gray-700 font-medium mb-1">
               Sebagai :
             </p>
             
-            <p className="text-[28px] font-black text-[#3b0764] mb-4">
+            <p className="text-[26px] font-black text-[#3b0764] mb-4">
               Peserta
             </p>
             
-            <p className="text-[14px] text-gray-700 max-w-[650px] leading-[1.6] font-medium text-center">
+            <p className="text-[13px] text-gray-700 max-w-[650px] leading-[1.6] font-medium text-center">
               Acara Edukasi dan Bimbingan Teknis <strong className="text-[#3b0764]">"Sharing UMKM: Dari Manual Ke Digital - Solusi Anti Ribet Catat Keuangan & Tarik Pembeli"</strong> yang diselenggarakan di Aula Kantor DPD PKS Kalimalang pada tanggal 21 September 2026.
             </p>
+          </div>
 
-            {/* Signatures */}
-            <div className="flex justify-between w-full max-w-[650px] mt-auto pt-6 z-10 px-4">
-              <div className="text-center w-64">
-                <p className="text-[14px] font-bold text-[#3b0764] mb-16">Ketua Pelaksana</p>
-                <p className="font-bold text-[16px] text-[#3b0764] border-b-[2px] border-[#3b0764] pb-1 inline-block px-4">Wendi Suwandana</p>
-              </div>
-              
-              <div className="text-center w-64">
-                <p className="text-[14px] font-bold text-[#3b0764] mb-16">Pemateri Ahli</p>
-                <p className="font-bold text-[16px] text-[#3b0764] border-b-[2px] border-[#3b0764] pb-1 inline-block px-4">Logaritma Team</p>
-              </div>
+          {/* Signatures */}
+          <div className="absolute bottom-[40px] left-[200px] right-[180px] flex justify-between z-10">
+            <div className="text-center w-64">
+              <p className="text-[14px] font-bold text-[#3b0764] mb-16">Ketua Pelaksana</p>
+              <p className="font-bold text-[15px] text-[#3b0764] inline-block px-4">Wendi Suwandana</p>
+            </div>
+            
+            <div className="text-center w-64">
+              <p className="text-[14px] font-bold text-[#3b0764] mb-16">Pemateri Ahli</p>
+              <p className="font-bold text-[15px] text-[#3b0764] inline-block px-4">Logaritma Team</p>
             </div>
           </div>
         </div>

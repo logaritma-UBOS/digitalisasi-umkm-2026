@@ -140,74 +140,124 @@ export default function SertifikatPage() {
       <div className="fixed top-[200%] pointer-events-none">
         <div 
           ref={certificateRef}
-          className="w-[1123px] h-[794px] bg-white relative overflow-hidden flex flex-col items-center text-center font-sans shadow-2xl"
+          className="w-[1123px] h-[794px] bg-white relative overflow-hidden flex flex-col items-center text-center shadow-2xl border-[24px] border-[#3b0764]"
+          style={{ fontFamily: "'Inter', 'Segoe UI', Roboto, sans-serif", boxSizing: 'border-box' }}
         >
-          {/* GEOMETRIC HEADER (Reference Image 2) */}
-          <svg width="100%" height="320" viewBox="0 0 1123 320" preserveAspectRatio="none" className="absolute top-0 left-0 w-full h-[320px] z-0">
-            {/* Geometric Polygons Pattern */}
-            <polygon points="0,0 400,0 500,280 0,320" fill="#e11d48" /> {/* Red */}
-            <polygon points="300,0 800,0 650,320 400,280" fill="#0ea5e9" /> {/* Light Blue */}
-            <polygon points="700,0 1123,0 1123,240 600,320" fill="#0d9488" /> {/* Teal */}
-            <polygon points="900,0 1123,0 1123,120" fill="#facc15" /> {/* Yellow */}
-            <polygon points="0,0 250,0 200,180 0,120" fill="#be123c" /> {/* Darker Red */}
-            <polygon points="800,0 950,0 900,100 850,50" fill="#14b8a6" /> {/* Lighter Teal */}
+          {/* Top Left "20 26" Box */}
+          <div className="absolute top-0 left-0 w-[200px] h-[380px] bg-[#3b0764] overflow-hidden flex flex-col items-center pt-12 z-0 rounded-br-[40px]">
+            {/* Topo lines SVG */}
+            <svg viewBox="0 0 200 400" className="absolute inset-0 w-full h-full opacity-20 z-0">
+              <path d="M-50,50 Q50,-20 150,50 T350,50" stroke="white" strokeWidth="2" fill="none"/>
+              <path d="M-50,80 Q50,10 150,80 T350,80" stroke="white" strokeWidth="2" fill="none"/>
+              <path d="M-50,110 Q50,40 150,110 T350,110" stroke="white" strokeWidth="2" fill="none"/>
+              <path d="M-20,200 C80,100 120,300 250,200" stroke="white" strokeWidth="2" fill="none"/>
+              <path d="M-20,230 C80,130 120,330 250,230" stroke="white" strokeWidth="2" fill="none"/>
+              <path d="M-20,260 C80,160 120,360 250,260" stroke="white" strokeWidth="2" fill="none"/>
+              <path d="M-20,290 C80,190 120,390 250,290" stroke="white" strokeWidth="2" fill="none"/>
+            </svg>
+            <span className="text-white font-black text-[100px] leading-[0.85] z-10">20</span>
+            <span className="text-white font-black text-[100px] leading-[0.85] z-10">26</span>
+          </div>
+
+          {/* Bottom Right Vertical Box */}
+          <div className="absolute bottom-0 right-0 w-[160px] h-[380px] bg-[#3b0764] overflow-hidden flex items-center justify-center z-0 rounded-tl-[40px]">
+            <svg viewBox="0 0 160 400" className="absolute inset-0 w-full h-full opacity-20 z-0">
+              <path d="M-50,50 Q50,-20 150,50 T350,50" stroke="white" strokeWidth="2" fill="none"/>
+              <path d="M-50,80 Q50,10 150,80 T350,80" stroke="white" strokeWidth="2" fill="none"/>
+              <path d="M-20,200 C80,100 120,300 250,200" stroke="white" strokeWidth="2" fill="none"/>
+              <path d="M-20,230 C80,130 120,330 250,230" stroke="white" strokeWidth="2" fill="none"/>
+            </svg>
+            <span className="text-white font-black text-[54px] tracking-widest z-10" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+              SHARING UMKM
+            </span>
+          </div>
+
+          {/* Top Right Geometric Shapes */}
+          <div className="absolute top-[40px] right-0 grid grid-cols-3 w-[180px] h-[240px] z-0 opacity-100">
+            <div className="bg-[#7e22ce] rounded-br-full"></div>
+            <div className="bg-[#3b0764] rounded-bl-full"></div>
+            <div className="bg-[#c026d3] rounded-tl-full"></div>
             
-            {/* Curved White Bottom Overlay */}
-            <path d="M0,280 C350,80 750,80 1123,220 L1123,320 L0,320 Z" fill="#ffffff" />
-          </svg>
+            <div className="bg-[#a21caf] rounded-tr-full"></div>
+            <div className="bg-[#7e22ce] rounded-full scale-75"></div>
+            <div className="bg-[#3b0764] rounded-br-full"></div>
+            
+            <div className="bg-[#c026d3] rounded-bl-full"></div>
+            <div className="bg-[#a21caf] rounded-tl-full"></div>
+            <div className="bg-[#7e22ce] rounded-tr-full"></div>
+            
+            <div className="bg-[#3b0764] rounded-br-full"></div>
+            <div className="bg-[#c026d3] rounded-bl-full"></div>
+            <div className="bg-[#a21caf] rounded-tl-full"></div>
+          </div>
 
-          {/* LOGO (Reference Image 3) */}
-          <img 
-            src="/logo-sharing-umkm.jpg" 
-            alt="Logo UMKM" 
-            className="absolute top-12 left-16 w-[120px] h-[120px] object-contain rounded-full shadow-md z-10 border-4 border-white bg-white"
-          />
+          {/* Bottom Left Geometric Shapes */}
+          <div className="absolute bottom-[40px] left-[176px] grid grid-cols-3 w-[180px] h-[180px] z-0 opacity-100">
+            <div className="bg-[#3b0764] rounded-tr-full"></div>
+            <div className="bg-[#7e22ce] rounded-bl-full"></div>
+            <div className="bg-[#c026d3] rounded-br-full"></div>
+            
+            <div className="bg-[#a21caf] rounded-tl-full"></div>
+            <div className="bg-[#3b0764] rounded-tr-full"></div>
+            <div className="bg-[#7e22ce] rounded-bl-full"></div>
+            
+            <div className="bg-[#c026d3] rounded-br-full"></div>
+            <div className="bg-[#a21caf] rounded-tl-full"></div>
+            <div className="bg-[#3b0764] rounded-tr-full"></div>
+          </div>
 
-          {/* TEXT CONTENT */}
-          <div className="z-10 mt-[170px] flex flex-col items-center w-full px-20">
-            <h1 className="text-[68px] font-medium text-slate-900 tracking-[0.25em] mb-1 uppercase">
-              SERTIFIKAT
+          {/* Logo Section */}
+          <div className="absolute top-[50px] left-[230px] z-10 flex items-center gap-4">
+             <img src="/logo-sharing-umkm.jpg" className="w-[80px] h-[80px] object-contain rounded-full shadow-sm" />
+             <div className="text-left leading-tight">
+                <p className="text-[14px] font-black text-[#3b0764]">DIGITALISASI UMKM</p>
+                <p className="text-[12px] font-bold text-gray-500">KOTA BEKASI 2026</p>
+             </div>
+          </div>
+
+          {/* MAIN CONTENT AREA */}
+          <div className="z-10 flex flex-col items-center justify-center w-full h-full px-[240px] pt-[70px]">
+            <h1 className="text-[100px] font-black text-[#3b0764] tracking-tight mb-2 capitalize" style={{ letterSpacing: '-0.02em' }}>
+              Sertifikat
             </h1>
             
-            <p className="text-[17px] text-slate-700 tracking-wider mb-12 font-medium">
-              NOMOR: 001/UMKM-DIGITAL/IX/2026
+            <p className="text-[16px] font-bold text-[#3b0764] tracking-widest mb-10">
+              Nomor : 042/Pan-SharingUMKM/IX/2026
             </p>
             
-            <p className="text-[20px] font-bold text-slate-800 tracking-widest mb-6 uppercase">
-              Sertifikat Ini Diberikan Kepada
+            <p className="text-[20px] text-gray-700 font-medium mb-3">
+              Diberikan Kepada:
             </p>
             
-            <h2 className="text-[60px] font-bold text-teal-600 mb-6 border-b-2 border-slate-300 pb-2 px-20 capitalize">
-              {namaPeserta}
-            </h2>
-            
-            <p className="text-[22px] font-medium text-slate-600 tracking-wide mb-4 uppercase">
-              Atas Partisipasinya Sebagai <span className="font-black text-slate-900">PESERTA</span>
-            </p>
-            
-            <p className="text-[17px] text-slate-500 max-w-4xl leading-relaxed font-medium uppercase px-12">
-              Pada Kegiatan <strong className="text-slate-600">Bimbingan Teknis "Sharing UMKM: Dari Manual Ke Digital"</strong><br/>
-              Solusi Anti Ribet Catat Keuangan & Tarik Pembeli<br/>
-              Yang Dilaksanakan Pada Senin, 21 September 2026 Pukul 08.30 - 11.30 WIB.
-            </p>
-          </div>
-          
-          {/* SIGNATURES */}
-          <div className="flex justify-between w-full max-w-[900px] mt-auto pb-12 z-10 px-8">
-            <div className="text-center w-72">
-              <p className="text-[17px] text-slate-500 mb-20">Ketua Pelaksana</p>
-              <div className="border-b-[1px] border-slate-400 mx-auto w-full relative">
-                 {/* Empty space for actual signature */}
-              </div>
-              <p className="font-bold text-[18px] text-slate-700 mt-2">Wendi Suwandana</p>
+            <div className="w-full border-b-[3px] border-[#3b0764] mb-5 flex justify-center pb-2">
+              <h2 className="text-[52px] font-black text-[#3b0764] capitalize truncate px-8 max-w-[800px]">
+                {namaPeserta}
+              </h2>
             </div>
             
-            <div className="text-center w-72">
-              <p className="text-[17px] text-slate-500 mb-1">Bekasi, 21 September 2026</p>
-              <p className="text-[17px] text-slate-500 mb-12">Pemateri Ahli</p>
-              <div className="border-b-[1px] border-slate-400 mx-auto w-full relative">
+            <p className="text-[18px] text-gray-700 font-medium mb-1">
+              Sebagai :
+            </p>
+            
+            <p className="text-[32px] font-black text-[#3b0764] mb-6">
+              Peserta
+            </p>
+            
+            <p className="text-[15px] text-gray-700 max-w-[700px] leading-[1.6] font-medium text-center">
+              Acara Edukasi dan Bimbingan Teknis <strong className="text-[#3b0764]">"Sharing UMKM: Dari Manual Ke Digital - Solusi Anti Ribet Catat Keuangan & Tarik Pembeli"</strong> yang diselenggarakan di Aula Kantor DPD PKS Kalimalang pada tanggal 21 September 2026.
+            </p>
+
+            {/* Signatures */}
+            <div className="flex justify-between w-full max-w-[700px] mt-12 z-10 px-4">
+              <div className="text-center w-64">
+                <p className="text-[14px] font-bold text-[#3b0764] mb-20">Ketua Pelaksana</p>
+                <p className="font-bold text-[16px] text-[#3b0764] border-b-[2px] border-[#3b0764] pb-1 inline-block px-4">Wendi Suwandana</p>
               </div>
-              <p className="font-bold text-[18px] text-slate-700 mt-2">Logaritma Team</p>
+              
+              <div className="text-center w-64">
+                <p className="text-[14px] font-bold text-[#3b0764] mb-20">Pemateri Ahli</p>
+                <p className="font-bold text-[16px] text-[#3b0764] border-b-[2px] border-[#3b0764] pb-1 inline-block px-4">Logaritma Team</p>
+              </div>
             </div>
           </div>
         </div>

@@ -225,6 +225,37 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleToggleHadir = async (p: Peserta) => {
+    const isCurrentlyHadir = String(p.nama_usaha).includes('||HADIR');
+    const newStatus = !isCurrentlyHadir;
+    
+    try {
+      const res = await fetch('/api/admin/kehadiran', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-admin-password': password 
+        },
+        body: JSON.stringify({ 
+          id: p.id, 
+          currentNamaUsaha: p.nama_usaha, 
+          isHadir: newStatus 
+        }),
+      });
+
+      if (res.ok) {
+        const { newNamaUsaha } = await res.json();
+        setPeserta(prev => prev.map(item => 
+          item.id === p.id ? { ...item, nama_usaha: newNamaUsaha } : item
+        ));
+      } else {
+        alert('Gagal mengupdate status kehadiran');
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan koneksi.');
+    }
+  };
+
   const downloadPDF = () => {
     const doc = new jsPDF();
     
@@ -237,7 +268,7 @@ export default function AdminDashboard() {
     const tableData = peserta.map((p, i) => [
       i + 1,
       p.nama_lengkap,
-      p.nama_usaha,
+      String(p.nama_usaha).replace('||HADIR', ''),
       p.no_whatsapp,
       new Date(p.created_at).toLocaleString('id-ID', {
         day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -270,7 +301,7 @@ export default function AdminDashboard() {
       // FIX EXCEL: Tambahkan ="" pada kolom nomor WA atau teks angka agar Excel tidak mengubahnya jadi format Scientific (E+12)
       const formatExcelText = (str: string) => {
         if (!str) return '""';
-        const cleanStr = String(str).replace(/"/g, '""');
+        const cleanStr = String(str).replace('||HADIR', '').replace(/"/g, '""');
         // Jika string berisi karakter angka panjang (seperti no WA atau NIK), paksa jadi formula teks
         if (/^\d{10,}$/.test(cleanStr.replace(/\D/g, ''))) {
           // Format `="081234"` memaksa Excel membaca ini murni sebagai teks tanpa E+12
@@ -432,62 +463,77 @@ export default function AdminDashboard() {
                   <th className="p-5 text-sm font-semibold text-gray-600">Nama Usaha</th>
                   <th className="p-5 text-sm font-semibold text-gray-600">Email & WhatsApp</th>
                   <th className="p-5 text-sm font-semibold text-gray-600">Waktu Pendaftaran</th>
+                  <th className="p-5 text-sm font-semibold text-gray-600 text-center">Hadir?</th>
                   <th className="p-5 text-sm font-semibold text-gray-600 text-center">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {peserta.map((p, index) => (
-                  <tr key={p.id} className={`transition-colors group ${selectedIds.includes(p.id) ? 'bg-blue-50/50' : 'hover:bg-blue-50/30'}`}>
-                    <td className="p-5 text-center">
-                      <input 
-                        type="checkbox" 
-                        className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                        checked={selectedIds.includes(p.id)}
-                        onChange={() => toggleSelect(p.id)}
-                      />
-                    </td>
-                    <td className="p-5 text-sm text-gray-500">{index + 1}</td>
-                    <td className="p-5">
-                      <p className="font-semibold text-gray-800">{p.nama_lengkap}</p>
-                    </td>
-                    <td className="p-5 text-sm text-gray-600">{p.nama_usaha}</td>
-                    <td className="p-5">
-                      <p className="text-sm font-medium text-gray-800">{p.email}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{p.no_whatsapp}</p>
-                    </td>
-                    <td className="p-5 text-sm text-gray-500">
-                      {new Date(p.created_at).toLocaleString('id-ID', {
-                        day: 'numeric', month: 'long', year: 'numeric',
-                        hour: '2-digit', minute: '2-digit'
-                      })}
-                    </td>
-                    <td className="p-5 text-center">
-                      <div className="flex items-center justify-center gap-2">
+                {peserta.map((p, index) => {
+                  const isHadir = String(p.nama_usaha).includes('||HADIR');
+                  const displayNamaUsaha = String(p.nama_usaha).replace('||HADIR', '');
+
+                  return (
+                    <tr key={p.id} className={`transition-colors group ${selectedIds.includes(p.id) ? 'bg-blue-50/50' : 'hover:bg-blue-50/30'}`}>
+                      <td className="p-5 text-center">
+                        <input 
+                          type="checkbox" 
+                          className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          checked={selectedIds.includes(p.id)}
+                          onChange={() => toggleSelect(p.id)}
+                        />
+                      </td>
+                      <td className="p-5 text-sm text-gray-500">{index + 1}</td>
+                      <td className="p-5">
+                        <p className="font-semibold text-gray-800">{p.nama_lengkap}</p>
+                      </td>
+                      <td className="p-5 text-sm text-gray-600">{displayNamaUsaha}</td>
+                      <td className="p-5">
+                        <p className="text-sm font-medium text-gray-800">{p.email}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">{p.no_whatsapp}</p>
+                      </td>
+                      <td className="p-5 text-sm text-gray-500">
+                        {new Date(p.created_at).toLocaleString('id-ID', {
+                          day: 'numeric', month: 'long', year: 'numeric',
+                          hour: '2-digit', minute: '2-digit'
+                        })}
+                      </td>
+                      <td className="p-5 text-center">
                         <button 
-                          onClick={() => handleSendWA(p)}
-                          className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                          title="Kirim Pesan WA (Pancingan)"
+                          onClick={() => handleToggleHadir(p)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${isHadir ? 'bg-green-100 text-green-700 border-green-200' : 'bg-gray-100 text-gray-500 border-gray-200 hover:bg-gray-200'}`}
+                          title="Tandai Kehadiran"
                         >
-                          <Send className="w-4 h-4" />
+                          {isHadir ? '✓ HADIR' : 'ABSEN'}
                         </button>
-                        <button 
-                          onClick={() => setEditingPeserta(p)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          title="Edit"
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(p.id)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                          title="Hapus"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="p-5 text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <button 
+                            onClick={() => handleSendWA(p)}
+                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                            title="Kirim Pesan WA (Pancingan)"
+                          >
+                            <Send className="w-4 h-4" />
+                          </button>
+                          <button 
+                            onClick={() => setEditingPeserta(p)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            title="Edit"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
+                          <button 
+                            onClick={() => handleDelete(p.id)}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Hapus"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
                 {peserta.length === 0 && !loading && (
                   <tr>
                     <td colSpan={7} className="p-10 text-center text-gray-500">

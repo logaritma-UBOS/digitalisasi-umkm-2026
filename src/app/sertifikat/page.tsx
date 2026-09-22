@@ -191,21 +191,21 @@ export default function SertifikatPage() {
           </div>
 
           {/* Bottom Right Vertical Box */}
-          <div className="absolute bottom-0 right-0 w-[140px] h-[380px] bg-[#3b0764] overflow-hidden flex items-center justify-center z-0 rounded-tl-[60px]">
+          <div className="absolute bottom-0 right-0 w-[140px] h-[460px] bg-[#3b0764] overflow-hidden flex items-center justify-center z-0 rounded-tl-[60px]">
             <svg viewBox="0 0 160 400" className="absolute inset-0 w-full h-full opacity-20 z-0">
               <path d="M-50,50 Q50,-20 150,50 T350,50" stroke="white" strokeWidth="2" fill="none"/>
               <path d="M-50,80 Q50,10 150,80 T350,80" stroke="white" strokeWidth="2" fill="none"/>
               <path d="M-20,200 C80,100 120,300 250,200" stroke="white" strokeWidth="2" fill="none"/>
               <path d="M-20,230 C80,130 120,330 250,230" stroke="white" strokeWidth="2" fill="none"/>
             </svg>
-            <span className="text-white font-black text-[44px] tracking-widest z-10 whitespace-nowrap" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+            <span className="text-white font-black text-[34px] tracking-widest z-10 whitespace-nowrap" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
               SHARING UMKM
             </span>
           </div>
 
-          {/* Logo Section */}
-          <div className="absolute top-[30px] left-[200px] z-10 flex items-center gap-3">
-             <img src="/logo-sharing-umkm.jpg" className="w-[60px] h-[60px] object-contain rounded-full shadow-sm" />
+          {/* Logo Section (Top Center) */}
+          <div className="absolute top-[25px] left-1/2 -translate-x-1/2 z-10 flex items-center gap-3">
+             <img src="/logo-sharing-umkm.jpg" className="w-[50px] h-[50px] object-contain rounded-full shadow-sm" />
              <div className="text-left leading-tight">
                 <p className="text-[12px] font-black text-[#3b0764]">DIGITALISASI UMKM</p>
                 <p className="text-[10px] font-bold text-gray-500">KOTA BEKASI 2026</p>
@@ -213,7 +213,7 @@ export default function SertifikatPage() {
           </div>
 
           {/* MAIN CONTENT AREA */}
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-start px-[180px] pt-[75px] pointer-events-none">
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-start px-[180px] pt-[95px] pointer-events-none">
             <h1 className="text-[85px] font-black text-[#3b0764] tracking-tight mb-2 capitalize leading-none" style={{ letterSpacing: '-0.02em' }}>
               Sertifikat
             </h1>

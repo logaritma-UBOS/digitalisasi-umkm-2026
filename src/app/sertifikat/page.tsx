@@ -165,7 +165,7 @@ export default function SertifikatPage() {
               className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl transition-all shadow-lg flex items-center justify-center gap-3 disabled:opacity-70"
             >
               {isDownloading ? <Loader2 className="w-6 h-6 animate-spin" /> : <Download className="w-6 h-6" />}
-              {isDownloading ? 'Memproses Unduhan...' : 'Download Sertifikat (Resolusi Tinggi)'}
+              {isDownloading ? 'Memproses Unduhan...' : 'Download Sertifikat'}
             </button>
             <button 
               onClick={() => { setStatus('idle'); setPhone(''); setPreviewUrl(null); }}

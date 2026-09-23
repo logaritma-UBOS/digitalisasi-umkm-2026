@@ -246,15 +246,23 @@ export default function SertifikatPage() {
           </div>
 
           {/* Signatures */}
-          <div className="absolute bottom-[40px] left-[200px] right-[180px] flex justify-between z-10">
-            <div className="text-center w-64">
-              <p className="text-[14px] font-bold text-[#3b0764] mb-16">Ketua Pelaksana</p>
-              <p className="font-bold text-[15px] text-[#3b0764] inline-block px-4">Wendi Suwandana</p>
+          <div className="absolute bottom-[30px] left-[200px] right-[180px] flex justify-between z-10">
+            <div className="text-center w-64 flex flex-col items-center">
+              <p className="text-[14px] font-bold text-[#3b0764] mb-2">Ketua Pelaksana</p>
+              <div className="h-[70px] w-[160px] flex items-center justify-center mb-1">
+                {/* Gambar Tanda Tangan Ketua */}
+                <img src="/ttd-ketua.svg" alt="Tanda Tangan Ketua" className="max-h-full max-w-full object-contain mix-blend-multiply" />
+              </div>
+              <p className="font-bold text-[15px] text-[#3b0764] inline-block px-4 border-t border-transparent pt-1">Wendi Suwandana</p>
             </div>
             
-            <div className="text-center w-64">
-              <p className="text-[14px] font-bold text-[#3b0764] mb-16">Pemateri Ahli</p>
-              <p className="font-bold text-[15px] text-[#3b0764] inline-block px-4">Logaritma Team</p>
+            <div className="text-center w-64 flex flex-col items-center">
+              <p className="text-[14px] font-bold text-[#3b0764] mb-2">Pemateri Ahli</p>
+              <div className="h-[70px] w-[160px] flex items-center justify-center mb-1">
+                {/* Gambar Tanda Tangan Pemateri */}
+                <img src="/ttd-pemateri.svg" alt="Tanda Tangan Pemateri" className="max-h-full max-w-full object-contain mix-blend-multiply" />
+              </div>
+              <p className="font-bold text-[15px] text-[#3b0764] inline-block px-4 border-t border-transparent pt-1">Logaritma Team</p>
             </div>
           </div>
         </div>

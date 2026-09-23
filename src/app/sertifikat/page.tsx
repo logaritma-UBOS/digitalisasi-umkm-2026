@@ -246,32 +246,33 @@ export default function SertifikatPage() {
           </div>
 
           {/* Signatures */}
-          <div className="absolute bottom-[30px] left-[200px] right-[180px] flex justify-between z-10">
-            <div className="text-center w-64 flex flex-col items-center">
+          <div className="absolute bottom-[30px] left-[180px] right-[160px] flex justify-between z-10">
+            <div className="text-center w-72 flex flex-col items-center">
               <p className="text-[14px] font-bold text-[#3b0764] mb-2">Ketua Pelaksana</p>
-              <div className="h-[70px] w-[180px] flex items-center justify-center mb-1">
+              <div className="relative h-[90px] w-[220px] flex items-center justify-center mb-2">
                 {/* Gambar Tanda Tangan Ketua */}
                 <img 
                   src="/ttd-ketua.png" 
                   alt="Tanda Tangan Ketua" 
-                  className="max-h-[140%] max-w-[140%] object-contain mix-blend-multiply opacity-90" 
+                  className="w-full h-full object-contain mix-blend-multiply" 
                 />
               </div>
-              <p className="font-bold text-[15px] text-[#3b0764] inline-block px-4 border-t border-transparent pt-1">Wendi Suwandana</p>
+              <p className="font-bold text-[16px] text-[#3b0764] inline-block px-4 border-t border-transparent pt-1">Wendi Suwandana</p>
             </div>
             
-            <div className="text-center w-64 flex flex-col items-center">
+            <div className="text-center w-72 flex flex-col items-center">
               <p className="text-[14px] font-bold text-[#3b0764] mb-2">Pemateri Ahli</p>
-              <div className="h-[70px] w-[180px] flex items-center justify-center mb-1">
-                {/* Gambar Tanda Tangan Pemateri (Di-rotate agar lurus) */}
-                <img 
-                  src="/ttd-pemateri.png" 
-                  alt="Tanda Tangan Pemateri" 
-                  className="max-h-[180%] max-w-[180%] object-contain mix-blend-multiply opacity-90" 
-                  style={{ transform: 'rotate(-25deg) scale(1.1) translateY(-5px)' }}
-                />
+              <div className="relative h-[90px] w-[220px] flex items-center justify-center mb-2">
+                {/* Wrapper div untuk rotasi agar ter-render sempurna di html-to-image */}
+                <div className="w-[180px] h-[180px] flex items-center justify-center origin-center -rotate-[35deg] scale-[1.3]">
+                  <img 
+                    src="/ttd-pemateri.png" 
+                    alt="Tanda Tangan Pemateri" 
+                    className="w-full h-full object-contain mix-blend-multiply" 
+                  />
+                </div>
               </div>
-              <p className="font-bold text-[15px] text-[#3b0764] inline-block px-4 border-t border-transparent pt-1">Logaritma Team</p>
+              <p className="font-bold text-[16px] text-[#3b0764] inline-block px-4 border-t border-transparent pt-1">Logaritma Team</p>
             </div>
           </div>
         </div>

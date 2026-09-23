@@ -249,12 +249,12 @@ export default function SertifikatPage() {
           <div className="absolute bottom-[30px] left-[200px] right-[180px] flex justify-between z-10">
             <div className="text-center w-64 flex flex-col items-center">
               <p className="text-[14px] font-bold text-[#3b0764] mb-2">Ketua Pelaksana</p>
-              <div className="h-[70px] w-[160px] flex items-center justify-center mb-1">
+              <div className="h-[70px] w-[180px] flex items-center justify-center mb-1">
                 {/* Gambar Tanda Tangan Ketua */}
                 <img 
                   src="/ttd-ketua.png" 
                   alt="Tanda Tangan Ketua" 
-                  className="max-h-full max-w-full object-contain mix-blend-multiply grayscale contrast-[1.5] brightness-[1.1]" 
+                  className="max-h-[140%] max-w-[140%] object-contain mix-blend-multiply opacity-90" 
                 />
               </div>
               <p className="font-bold text-[15px] text-[#3b0764] inline-block px-4 border-t border-transparent pt-1">Wendi Suwandana</p>
@@ -262,13 +262,13 @@ export default function SertifikatPage() {
             
             <div className="text-center w-64 flex flex-col items-center">
               <p className="text-[14px] font-bold text-[#3b0764] mb-2">Pemateri Ahli</p>
-              <div className="h-[70px] w-[160px] flex items-center justify-center mb-1">
+              <div className="h-[70px] w-[180px] flex items-center justify-center mb-1">
                 {/* Gambar Tanda Tangan Pemateri (Di-rotate agar lurus) */}
                 <img 
                   src="/ttd-pemateri.png" 
                   alt="Tanda Tangan Pemateri" 
-                  className="max-h-[140%] max-w-[140%] object-contain mix-blend-multiply grayscale contrast-[1.8] brightness-[1.2]" 
-                  style={{ transform: 'rotate(-25deg)' }}
+                  className="max-h-[180%] max-w-[180%] object-contain mix-blend-multiply opacity-90" 
+                  style={{ transform: 'rotate(-25deg) scale(1.1) translateY(-5px)' }}
                 />
               </div>
               <p className="font-bold text-[15px] text-[#3b0764] inline-block px-4 border-t border-transparent pt-1">Logaritma Team</p>

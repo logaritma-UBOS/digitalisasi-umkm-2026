@@ -291,12 +291,14 @@ export default function SertifikatPage() {
             <div className="text-center w-72 flex flex-col items-center">
               <p className="text-[14px] font-bold text-[#3b0764] mb-2">Ketua Pelaksana</p>
               <div className="relative h-[90px] w-[220px] flex items-center justify-center mb-2">
-                {/* Gambar Tanda Tangan Ketua */}
-                <img 
-                  src="/ttd-ketua.png" 
-                  alt="Tanda Tangan Ketua" 
-                  className="w-full h-full object-contain mix-blend-multiply" 
-                />
+                {/* Gambar Tanda Tangan Ketua (Dipertebal & dihitamkan) */}
+                <div className="w-[180px] h-[90px] flex items-center justify-center scale-[1.25]">
+                  <img 
+                    src="/ttd-ketua.png" 
+                    alt="Tanda Tangan Ketua" 
+                    className="w-full h-full object-contain mix-blend-multiply brightness-0 drop-shadow-[0_0_1px_rgba(0,0,0,0.8)]" 
+                  />
+                </div>
               </div>
               <p className="font-bold text-[16px] text-[#3b0764] inline-block px-4 border-t border-transparent pt-1">Wendi Suwandana</p>
             </div>

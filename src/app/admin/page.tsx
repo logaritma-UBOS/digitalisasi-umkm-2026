@@ -325,6 +325,19 @@ export default function AdminDashboard() {
     document.body.removeChild(link);
   };
 
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredPeserta = peserta.filter(p => {
+    const search = searchTerm.toLowerCase();
+    const cleanUsaha = String(p.nama_usaha).replace('||HADIR', '').toLowerCase();
+    return (
+      p.nama_lengkap.toLowerCase().includes(search) ||
+      cleanUsaha.includes(search) ||
+      p.no_whatsapp.toLowerCase().includes(search) ||
+      p.email.toLowerCase().includes(search)
+    );
+  });
+
   if (!isAuthenticated) {
     return (
       <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
@@ -443,18 +456,41 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Search Bar */}
+        <div className="bg-white px-5 py-4 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          <input 
+            type="text" 
+            placeholder="Cari berdasarkan nama, nama usaha, nomor WA, atau email..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="flex-1 bg-transparent outline-none text-gray-800 placeholder:text-gray-400"
+          />
+          {searchTerm && (
+            <button onClick={() => setSearchTerm('')} className="p-1 hover:bg-gray-100 rounded-full text-gray-400 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+            </button>
+          )}
+        </div>
+
         {/* Table */}
         <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
                 <tr className="bg-gray-50/50 border-b border-gray-100">
                   <th className="p-5 w-12 text-center">
                     <input 
                       type="checkbox" 
                       className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                      checked={peserta.length > 0 && selectedIds.length === peserta.length}
-                      onChange={toggleSelectAll}
+                      checked={filteredPeserta.length > 0 && selectedIds.length === filteredPeserta.length}
+                      onChange={() => {
+                        if (selectedIds.length === filteredPeserta.length && filteredPeserta.length > 0) {
+                          setSelectedIds([]);
+                        } else {
+                          setSelectedIds(filteredPeserta.map(p => p.id));
+                        }
+                      }}
                       title="Pilih Semua"
                     />
                   </th>
@@ -468,7 +504,7 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {peserta.map((p, index) => {
+                {filteredPeserta.map((p, index) => {
                   const isHadir = String(p.nama_usaha).includes('||HADIR');
                   const displayNamaUsaha = String(p.nama_usaha).replace('||HADIR', '');
 
@@ -534,10 +570,10 @@ export default function AdminDashboard() {
                     </tr>
                   );
                 })}
-                {peserta.length === 0 && !loading && (
+                {filteredPeserta.length === 0 && !loading && (
                   <tr>
-                    <td colSpan={7} className="p-10 text-center text-gray-500">
-                      Belum ada pendaftar sejauh ini.
+                    <td colSpan={8} className="p-10 text-center text-gray-500">
+                      {searchTerm ? 'Tidak ada peserta yang cocok dengan pencarian Anda.' : 'Belum ada pendaftar sejauh ini.'}
                     </td>
                   </tr>
                 )}
@@ -577,8 +613,14 @@ export default function AdminDashboard() {
                 <input
                   type="text"
                   required
-                  value={editingPeserta.nama_usaha}
-                  onChange={(e) => setEditingPeserta({...editingPeserta, nama_usaha: e.target.value})}
+                  value={String(editingPeserta.nama_usaha).replace('||HADIR', '')}
+                  onChange={(e) => {
+                    const isHadir = String(editingPeserta.nama_usaha).includes('||HADIR');
+                    setEditingPeserta({
+                      ...editingPeserta, 
+                      nama_usaha: isHadir ? `${e.target.value}||HADIR` : e.target.value
+                    });
+                  }}
                   className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-gray-800"
                 />
               </div>

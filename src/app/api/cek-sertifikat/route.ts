@@ -10,6 +10,11 @@ export async function POST(request: Request) {
 
     // Format nomor HP (hapus spasi, +, dll)
     const cleanPhone = phone.replace(/\D/g, '');
+    
+    if (cleanPhone.length < 8) {
+       return NextResponse.json({ message: 'Nomor WhatsApp tidak valid' }, { status: 400 });
+    }
+
     let searchPhones = [cleanPhone];
     
     // Algoritma Smart Matching
@@ -19,12 +24,15 @@ export async function POST(request: Request) {
       searchPhones.push('08' + cleanPhone.substring(3));
     }
 
+    // Gunakan query OR dengan ilike agar tangguh terhadap spasi/karakter tak terlihat di database
+    const orQuery = searchPhones.map(p => `no_whatsapp.ilike.%${p}%`).join(',');
+
     const { data, error } = await supabaseAdmin
       .from('peserta')
       .select('nama_lengkap, nama_usaha')
       .neq('nama_usaha', '__KUIS__')
       .neq('nama_usaha', '__KUIS_STATE__')
-      .in('no_whatsapp', searchPhones)
+      .or(orQuery)
       .limit(1)
       .single();
 

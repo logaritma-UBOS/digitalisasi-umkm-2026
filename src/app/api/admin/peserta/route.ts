@@ -53,11 +53,13 @@ export async function PUT(request: Request) {
     
     if (!id) return NextResponse.json({ message: 'ID diperlukan' }, { status: 400 });
 
+    const cleanWhatsapp = no_whatsapp ? no_whatsapp.replace(/\D/g, '') : undefined;
+
     const { error } = await supabaseAdmin.from('peserta').update({
       nama_lengkap,
       nama_usaha,
       email,
-      no_whatsapp
+      no_whatsapp: cleanWhatsapp
     }).eq('id', id);
 
     if (error) {
@@ -86,11 +88,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Data belum lengkap' }, { status: 400 });
     }
 
+    const cleanWhatsapp = no_whatsapp.replace(/\D/g, '');
+
     const { data, error } = await supabaseAdmin.from('peserta').insert([{
       nama_lengkap,
       nama_usaha,
-      email: email || `${no_whatsapp}@noemail.com`, // fallback for unique constraint if email is empty
-      no_whatsapp
+      email: email || `${cleanWhatsapp}@noemail.com`, // fallback for unique constraint if email is empty
+      no_whatsapp: cleanWhatsapp
     }]).select();
 
     if (error) {

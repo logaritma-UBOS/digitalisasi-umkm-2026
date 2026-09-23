@@ -267,8 +267,8 @@ export default function SertifikatPage() {
               Diberikan Kepada:
             </p>
             
-            <div className="w-full border-b-[2px] border-[#3b0764] mb-4 flex justify-center pb-2 px-10">
-              <h2 className="text-[48px] font-black text-[#3b0764] capitalize truncate w-full text-center">
+            <div className="w-full border-b-[2px] border-[#3b0764] mb-4 flex justify-center pb-2 px-2">
+              <h2 className="text-[44px] md:text-[48px] font-black text-[#3b0764] capitalize text-center leading-[1.1] break-words w-full">
                 {namaPeserta}
               </h2>
             </div>

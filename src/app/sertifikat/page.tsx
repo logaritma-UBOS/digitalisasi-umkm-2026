@@ -251,7 +251,11 @@ export default function SertifikatPage() {
               <p className="text-[14px] font-bold text-[#3b0764] mb-2">Ketua Pelaksana</p>
               <div className="h-[70px] w-[160px] flex items-center justify-center mb-1">
                 {/* Gambar Tanda Tangan Ketua */}
-                <img src="/ttd-ketua.svg" alt="Tanda Tangan Ketua" className="max-h-full max-w-full object-contain mix-blend-multiply" />
+                <img 
+                  src="/ttd-ketua.png" 
+                  alt="Tanda Tangan Ketua" 
+                  className="max-h-full max-w-full object-contain mix-blend-multiply grayscale contrast-[1.5] brightness-[1.1]" 
+                />
               </div>
               <p className="font-bold text-[15px] text-[#3b0764] inline-block px-4 border-t border-transparent pt-1">Wendi Suwandana</p>
             </div>
@@ -259,8 +263,13 @@ export default function SertifikatPage() {
             <div className="text-center w-64 flex flex-col items-center">
               <p className="text-[14px] font-bold text-[#3b0764] mb-2">Pemateri Ahli</p>
               <div className="h-[70px] w-[160px] flex items-center justify-center mb-1">
-                {/* Gambar Tanda Tangan Pemateri */}
-                <img src="/ttd-pemateri.svg" alt="Tanda Tangan Pemateri" className="max-h-full max-w-full object-contain mix-blend-multiply" />
+                {/* Gambar Tanda Tangan Pemateri (Di-rotate agar lurus) */}
+                <img 
+                  src="/ttd-pemateri.png" 
+                  alt="Tanda Tangan Pemateri" 
+                  className="max-h-[140%] max-w-[140%] object-contain mix-blend-multiply grayscale contrast-[1.8] brightness-[1.2]" 
+                  style={{ transform: 'rotate(-25deg)' }}
+                />
               </div>
               <p className="font-bold text-[15px] text-[#3b0764] inline-block px-4 border-t border-transparent pt-1">Logaritma Team</p>
             </div>

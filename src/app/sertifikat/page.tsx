@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Search, Loader2, Download, AlertCircle, Award, CheckCircle2 } from 'lucide-react';
 import * as htmlToImage from 'html-to-image';
 import { Poppins } from 'next/font/google';
@@ -17,13 +17,40 @@ export default function SertifikatPage() {
   const [namaPeserta, setNamaPeserta] = useState('');
   
   const [isDownloading, setIsDownloading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  
   const certificateRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (status === 'success' && certificateRef.current && !previewUrl) {
+      const generatePreview = async () => {
+        setIsPreviewLoading(true);
+        try {
+          // Generate low-res preview for quick display
+          const dataUrl = await htmlToImage.toPng(certificateRef.current!, { 
+            quality: 0.7, 
+            pixelRatio: 0.5 
+          });
+          setPreviewUrl(dataUrl);
+        } catch (err) {
+          console.error('Failed to generate preview', err);
+        } finally {
+          setIsPreviewLoading(false);
+        }
+      };
+      
+      // Delay slightly to let React flush the DOM with the namaPeserta
+      setTimeout(generatePreview, 150);
+    }
+  }, [status, namaPeserta, previewUrl]);
 
   const handleCek = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!phone.trim()) return;
 
     setStatus('loading');
+    setPreviewUrl(null); // Reset preview
     try {
       const res = await fetch('/api/cek-sertifikat', {
         method: 'POST',
@@ -70,16 +97,16 @@ export default function SertifikatPage() {
     <main className={`min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 relative overflow-hidden ${poppins.className}`}>
 
       <div className="max-w-xl w-full z-10">
-        <div className="text-center mb-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+        <div className="text-center mb-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
             <Award className="w-10 h-10 text-blue-600" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-800 mb-3 tracking-tight">Portal E-Sertifikat</h1>
-          <p className="text-slate-500 text-lg">Masukkan nomor WhatsApp yang Anda gunakan saat mendaftar acara Sharing UMKM.</p>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-800 mb-2 tracking-tight">Portal E-Sertifikat</h1>
+          <p className="text-slate-500 text-base">Masukkan nomor WhatsApp yang Anda gunakan saat mendaftar acara Sharing UMKM.</p>
         </div>
 
         {status === 'error' && (
-          <div className="mb-8 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-start gap-3 animate-in shake duration-300">
+          <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-start gap-3 animate-in shake duration-300">
             <AlertCircle className="w-6 h-6 text-red-500 mt-0.5 flex-shrink-0" />
             <p className="text-red-700 font-medium">{errorMessage}</p>
           </div>
@@ -113,21 +140,35 @@ export default function SertifikatPage() {
         )}
 
         {status === 'success' && (
-          <div className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/50 border border-slate-100 text-center animate-in zoom-in duration-500">
-            <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-slate-800 mb-2">Sertifikat Ditemukan!</h2>
-            <p className="text-slate-600 mb-8">Halo <strong className="text-blue-700">{namaPeserta}</strong>, sertifikat Anda sudah siap diunduh.</p>
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl shadow-slate-200/50 border border-slate-100 text-center animate-in zoom-in duration-500">
+            <CheckCircle2 className="w-14 h-14 text-green-500 mx-auto mb-3" />
+            <h2 className="text-2xl font-bold text-slate-800 mb-1">Sertifikat Ditemukan!</h2>
+            <p className="text-slate-600 mb-6">Halo <strong className="text-blue-700">{namaPeserta}</strong>, ini adalah pratinjau sertifikat Anda.</p>
             
+            {/* Area Pratinjau */}
+            <div className="w-full mb-6">
+              {isPreviewLoading || !previewUrl ? (
+                <div className="w-full aspect-[1.414] bg-slate-100 animate-pulse rounded-xl flex flex-col items-center justify-center border border-slate-200">
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-500 mb-2" />
+                  <p className="text-sm text-slate-500 font-medium">Memuat pratinjau...</p>
+                </div>
+              ) : (
+                <div className="w-full rounded-xl overflow-hidden shadow-md border border-slate-200">
+                  <img src={previewUrl} alt="Preview Sertifikat" className="w-full h-auto object-cover" />
+                </div>
+              )}
+            </div>
+
             <button 
               onClick={handleDownload}
-              disabled={isDownloading}
+              disabled={isDownloading || isPreviewLoading}
               className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl transition-all shadow-lg flex items-center justify-center gap-3 disabled:opacity-70"
             >
               {isDownloading ? <Loader2 className="w-6 h-6 animate-spin" /> : <Download className="w-6 h-6" />}
-              {isDownloading ? 'Memproses Gambar...' : 'Download Sertifikat (Resolusi Tinggi)'}
+              {isDownloading ? 'Memproses Unduhan...' : 'Download Sertifikat (Resolusi Tinggi)'}
             </button>
             <button 
-              onClick={() => { setStatus('idle'); setPhone(''); }}
+              onClick={() => { setStatus('idle'); setPhone(''); setPreviewUrl(null); }}
               className="mt-4 text-sm font-semibold text-slate-400 hover:text-slate-600"
             >
               Cek nomor lain

@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    let phoneInput = body.no_whatsapp?.trim().replace(/\D/g, ''); // Bersihkan karakter non-angka (seperti spasi, +, -)
+    const phoneInput = body.no_whatsapp?.trim().replace(/\D/g, ''); // Bersihkan karakter non-angka (seperti spasi, +, -)
     
     if (!phoneInput) {
       return NextResponse.json({ message: 'Nomor WhatsApp wajib diisi' }, { status: 400 });

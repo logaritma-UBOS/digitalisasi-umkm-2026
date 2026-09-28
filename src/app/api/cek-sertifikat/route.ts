@@ -15,7 +15,7 @@ export async function POST(request: Request) {
        return NextResponse.json({ message: 'Nomor WhatsApp tidak valid' }, { status: 400 });
     }
 
-    let searchPhones = [cleanPhone];
+    const searchPhones = [cleanPhone];
     
     // Algoritma Smart Matching
     if (cleanPhone.startsWith('08')) {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Poppins } from 'next/font/google';
-import { Loader2, UploadCloud, CheckCircle2, Youtube, MapPin, Store, User, Camera, MessageCircle, Star } from 'lucide-react';
+import { Loader2, UploadCloud, CheckCircle2, PlayCircle, MapPin, User, Camera, Star } from 'lucide-react';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -111,7 +111,7 @@ export default function DaftarReviewPage() {
         {/* Header */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center p-3 bg-red-100 rounded-2xl mb-4">
-            <Youtube className="w-8 h-8 text-red-600" />
+            <PlayCircle className="w-8 h-8 text-red-600" />
           </div>
           <h1 className="text-3xl md:text-4xl font-black text-gray-900 mb-4 tracking-tight">
             Pendaftaran Liputan & Review Usaha
@@ -243,6 +243,7 @@ export default function DaftarReviewPage() {
                   <div className="p-8 text-center flex flex-col items-center justify-center">
                     {filePreview ? (
                       <div className="space-y-3">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={filePreview} alt="Preview" className="max-h-40 rounded-lg mx-auto shadow-sm" />
                         <p className="text-sm text-green-600 font-semibold">{file?.name}</p>
                         <p className="text-xs text-gray-400">Klik atau drag untuk mengganti gambar</p>

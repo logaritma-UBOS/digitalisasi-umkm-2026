@@ -34,11 +34,12 @@ export default function AdminDashboard() {
   const [isBulkSending, setIsBulkSending] = useState(false);
 
   const fetchPeserta = async (pass: string) => {
+    const trimmedPass = pass.trim();
     setLoading(true);
     setErrorMsg('');
     try {
       const res = await fetch('/api/admin/peserta', {
-        headers: { 'x-admin-password': pass },
+        headers: { 'x-admin-password': trimmedPass },
       });
 
       if (res.ok) {
@@ -47,7 +48,12 @@ export default function AdminDashboard() {
         setIsAuthenticated(true);
         setSelectedIds([]); // Reset selection on refresh
       } else {
-        setErrorMsg('Password salah atau akses ditolak!');
+        const errResult = await res.json().catch(() => null);
+        if (res.status === 401) {
+          setErrorMsg(errResult?.message || 'Password salah atau akses ditolak!');
+        } else {
+          setErrorMsg(errResult?.message || 'Gagal terhubung ke database. Mohon cek apakah project Supabase sedang di-pause.');
+        }
       }
     } catch (err) {
       setErrorMsg('Gagal terhubung ke server');
@@ -58,7 +64,7 @@ export default function AdminDashboard() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    fetchPeserta(password);
+    fetchPeserta(password.trim());
   };
 
   const handleDelete = async (id: string) => {

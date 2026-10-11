@@ -5,8 +5,11 @@ const getAdminPassword = () => process.env.ADMIN_PASSWORD || 'adminlog2026';
 
 export async function GET(request: Request) {
   try {
-    if (request.headers.get('x-admin-password') !== getAdminPassword()) {
-      return NextResponse.json({ message: 'Akses Ditolak' }, { status: 401 });
+    const clientPass = request.headers.get('x-admin-password')?.trim();
+    const serverPass = getAdminPassword().trim();
+
+    if (clientPass !== serverPass) {
+      return NextResponse.json({ message: 'Password salah atau akses ditolak!' }, { status: 401 });
     }
 
     const { data, error } = await supabaseAdmin
@@ -15,10 +18,14 @@ export async function GET(request: Request) {
       .neq('nama_usaha', '__KUIS__')
       .order('created_at', { ascending: false });
 
-    if (error) throw error;
+    if (error) {
+      console.error('Database query error:', error);
+      return NextResponse.json({ message: `Database Error: ${error.message}` }, { status: 500 });
+    }
     return NextResponse.json({ data }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ message: 'Gagal mengambil data' }, { status: 500 });
+  } catch (error: any) {
+    console.error('Server error in GET /api/admin/peserta:', error);
+    return NextResponse.json({ message: error?.message || 'Gagal mengambil data dari database' }, { status: 500 });
   }
 }
 

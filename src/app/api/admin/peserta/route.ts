@@ -20,12 +20,18 @@ export async function GET(request: Request) {
 
     if (error) {
       console.error('Database query error:', error);
-      return NextResponse.json({ message: `Database Error: ${error.message}` }, { status: 500 });
+      const urlUsed = process.env.NEXT_PUBLIC_SUPABASE_URL || 'BELUM DIISI';
+      return NextResponse.json({ 
+        message: `Database Error: ${error.message} (URL yang terbaca di Vercel: ${urlUsed})` 
+      }, { status: 500 });
     }
     return NextResponse.json({ data }, { status: 200 });
   } catch (error: any) {
     console.error('Server error in GET /api/admin/peserta:', error);
-    return NextResponse.json({ message: error?.message || 'Gagal mengambil data dari database' }, { status: 500 });
+    const urlUsed = process.env.NEXT_PUBLIC_SUPABASE_URL || 'BELUM DIISI';
+    return NextResponse.json({ 
+      message: `${error?.message || 'Gagal mengambil data'}. (URL yang terbaca di Vercel: ${urlUsed})` 
+    }, { status: 500 });
   }
 }
 
